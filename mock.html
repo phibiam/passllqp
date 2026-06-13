@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mock Exam | PassLLQP</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sora:wght@700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --blue:#185FA5; --blue-light:#E6F1FB; --green:#0F6E56; --red:#993C1D; --amber:#854F0B; --text:#0F1117; --muted:#6B7280; --border:#E5E7EB; --bg:#F9FAFB; --white:#fff; --radius:12px; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+    nav { background: var(--white); border-bottom: 1px solid var(--border); padding: 0 20px; height: 56px; display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo { font-family: 'Sora', sans-serif; font-size: 17px; font-weight: 700; }
+    .nav-logo span { color: var(--blue); }
+    .nav-back { font-size: 13px; color: var(--muted); cursor: pointer; }
+    .timer-box { display: flex; align-items: center; gap: 8px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 5px 12px; font-size: 14px; font-weight: 600; color: var(--text); }
+    .timer-box.warning { border-color: var(--red); color: var(--red); }
+    .wrap { max-width: 680px; margin: 0 auto; padding: 20px 16px 40px; }
+    .start-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 36px; text-align: center; }
+    .start-card h1 { font-family: 'Sora', sans-serif; font-size: 26px; font-weight: 700; margin-bottom: 10px; }
+    .start-card p { font-size: 14px; color: var(--muted); margin-bottom: 24px; line-height: 1.7; max-width: 400px; margin-left: auto; margin-right: auto; }
+    .info-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 24px; }
+    .info-box { background: var(--bg); border-radius: 9px; padding: 14px; }
+    .info-box .iv { font-family: 'Sora', sans-serif; font-size: 24px; font-weight: 700; color: var(--blue); }
+    .info-box .il { font-size: 12px; color: var(--muted); }
+    .rules-box { background: var(--bg); border-radius: 9px; padding: 16px; text-align: left; margin-bottom: 24px; font-size: 13px; color: var(--muted); line-height: 1.9; }
+    .rules-box strong { color: var(--text); }
+    .start-btn { background: var(--blue); color: #fff; border: none; padding: 13px 32px; border-radius: 9px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; }
+    .exam-header { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 20px; margin-bottom: 14px; }
+    .exam-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+    .exam-label { font-size: 13px; color: var(--muted); }
+    .exam-label strong { color: var(--text); }
+    .score-row { display: flex; gap: 10px; }
+    .s-badge { background: var(--bg); border-radius: 6px; padding: 4px 10px; font-size: 12px; color: var(--muted); }
+    .s-badge strong { color: var(--text); }
+    .prog-bar { height: 4px; background: var(--border); border-radius: 2px; }
+    .prog-fill { height: 4px; background: var(--blue); border-radius: 2px; transition: width 0.3s; }
+    .q-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; margin-bottom: 12px; }
+    .q-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+    .q-num { font-size: 11px; font-weight: 600; color: var(--blue); letter-spacing: 0.05em; }
+    .diff-pill { font-size: 11px; padding: 3px 9px; border-radius: 20px; font-weight: 600; }
+    .diff-pill.beginner { background: #EAF3DE; color: #3B6D11; }
+    .diff-pill.intermediate { background: #FAEEDA; color: var(--amber); }
+    .diff-pill.advanced { background: #FAECE7; color: var(--red); }
+    .ch-tag { display: inline-block; font-size: 11px; font-weight: 600; color: var(--blue); background: var(--blue-light); padding: 3px 9px; border-radius: 20px; margin-bottom: 12px; }
+    .q-text { font-size: 15px; font-weight: 500; color: var(--text); line-height: 1.6; margin-bottom: 18px; }
+    .options { display: flex; flex-direction: column; gap: 8px; }
+    .option { border: 1px solid var(--border); border-radius: 9px; padding: 12px 14px; cursor: pointer; font-size: 13px; color: var(--text); line-height: 1.5; display: flex; align-items: flex-start; gap: 10px; transition: border-color 0.1s, background 0.1s; }
+    .option:hover:not(.disabled) { border-color: var(--blue); background: var(--blue-light); }
+    .option.correct { border-color: var(--green); background: #E1F5EE; pointer-events: none; }
+    .option.wrong { border-color: var(--red); background: #FAECE7; pointer-events: none; }
+    .option.disabled { pointer-events: none; }
+    .opt-l { font-size: 11px; font-weight: 600; color: var(--blue); background: var(--blue-light); width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+    .option.correct .opt-l { color: var(--green); background: #9FE1CB; }
+    .option.wrong .opt-l { color: var(--red); background: #F5C4B3; }
+    .exp { background: var(--bg); border-left: 3px solid var(--blue); border-radius: 0 8px 8px 0; padding: 12px 14px; margin-top: 12px; display: none; }
+    .exp.visible { display: block; }
+    .exp-lbl { font-size: 11px; font-weight: 600; color: var(--blue); margin-bottom: 5px; }
+    .exp p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+    .footer { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; }
+    .fl { font-size: 12px; color: var(--muted); }
+    .next-btn { background: var(--blue); color: #fff; border: none; padding: 9px 22px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; }
+    .next-btn:disabled { opacity: 0.35; cursor: default; }
+    .finish-btn { background: var(--green); color: #fff; border: none; padding: 9px 22px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; }
+    .results-wrap { display: none; }
+    .results-wrap.visible { display: block; }
+    .result-hero { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px; text-align: center; margin-bottom: 14px; }
+    .result-pct { font-family: 'Sora', sans-serif; font-size: 52px; font-weight: 700; margin-bottom: 6px; }
+    .result-pct.pass { color: var(--green); }
+    .result-pct.fail { color: var(--red); }
+    .result-verdict { font-size: 17px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+    .result-sub { font-size: 13px; color: var(--muted); }
+    .stats-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-bottom: 14px; }
+    .stat-box { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; text-align: center; }
+    .stat-box .sv { font-size: 22px; font-weight: 600; color: var(--text); }
+    .stat-box .sl { font-size: 12px; color: var(--muted); margin-top: 3px; }
+    .ch-breakdown { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 14px; }
+    .ch-breakdown h3 { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 14px; }
+    .ch-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+    .ch-lbl { font-size: 12px; color: var(--muted); width: 170px; flex-shrink: 0; }
+    .ch-bar-wrap { flex: 1; height: 6px; background: var(--border); border-radius: 3px; }
+    .ch-bar { height: 6px; border-radius: 3px; }
+    .ch-bar.good { background: var(--green); }
+    .ch-bar.mid { background: #D97706; }
+    .ch-bar.low { background: var(--red); }
+    .ch-pct { font-size: 12px; font-weight: 600; color: var(--text); width: 36px; text-align: right; }
+    .retry-btn { width: 100%; background: var(--blue); color: #fff; border: none; padding: 13px; border-radius: 9px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; }
+  </style>
+</head>
+<body>
+<nav>
+  <div class="nav-logo">Pass<span>LLQP</span></div>
+  <div id="timerDisplay" style="display:none;" class="timer-box">⏱ <span id="timerVal">90:00</span></div>
+  <div class="nav-back" onclick="location.href='index.html'">← Home</div>
+</nav>
+<div class="wrap">
+
+  <!-- START -->
+  <div id="startCard" class="start-card">
+    <h1>Alberta LLQP Mock Exam</h1>
+    <p>50 questions from all 8 chapters, mixed difficulty. You have 90 minutes. Pass mark is 60% (30 correct).</p>
+    <div class="info-row">
+      <div class="info-box"><div class="iv">50</div><div class="il">Questions</div></div>
+      <div class="info-box"><div class="iv">90</div><div class="il">Minutes</div></div>
+      <div class="info-box"><div class="iv">60%</div><div class="il">Pass mark</div></div>
+    </div>
+    <div class="rules-box">
+      <strong>How it works:</strong><br>
+      · ~6 questions per chapter, randomly selected each attempt<br>
+      · Correct answer + plain-language explanation shown after each question<br>
+      · Chapter breakdown at the end shows exactly where to focus<br>
+      · Timer counts down — finish before it hits zero<br>
+      · Retake as many times as you like — questions shuffle every time
+    </div>
+    <button class="start-btn" onclick="startExam()">Start exam →</button>
+  </div>
+
+  <!-- EXAM -->
+  <div id="examWrap" style="display:none;">
+    <div class="exam-header">
+      <div class="exam-top">
+        <div class="exam-label">Question <strong id="qNumD">1</strong> of <strong>50</strong></div>
+        <div class="score-row">
+          <div class="s-badge">✓ <strong id="cCount">0</strong></div>
+          <div class="s-badge">✗ <strong id="wCount">0</strong></div>
+        </div>
+      </div>
+      <div class="prog-bar"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+    </div>
+    <div class="q-card">
+      <div class="q-top">
+        <span class="q-num" id="qNum">QUESTION 1 OF 50</span>
+        <span class="diff-pill beginner" id="diffPill">Beginner</span>
+      </div>
+      <div class="ch-tag" id="chTag">Ch.1</div>
+      <div class="q-text" id="qText"></div>
+      <div class="options" id="opts"></div>
+      <div class="exp" id="exp">
+        <div class="exp-lbl">WHY THIS IS CORRECT</div>
+        <p id="expText"></p>
+      </div>
+    </div>
+    <div class="footer">
+      <div class="fl" id="fl">Select an answer to continue</div>
+      <button class="next-btn" id="nextBtn" disabled onclick="next()">Next →</button>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="resultsWrap" class="results-wrap">
+    <div class="result-hero">
+      <div class="result-pct" id="resPct">0%</div>
+      <div class="result-verdict" id="resVerdict">—</div>
+      <div class="result-sub" id="resSub">—</div>
+    </div>
+    <div class="stats-row">
+      <div class="stat-box"><div class="sv" id="rC">0</div><div class="sl">Correct</div></div>
+      <div class="stat-box"><div class="sv" id="rW">0</div><div class="sl">Incorrect</div></div>
+      <div class="stat-box"><div class="sv" id="rP">0%</div><div class="sl">Score</div></div>
+      <div class="stat-box"><div class="sv" id="rT">—</div><div class="sl">Time used</div></div>
+    </div>
+    <div class="ch-breakdown">
+      <h3>Performance by chapter — focus on the red ones</h3>
+      <div id="chBreakdown"></div>
+    </div>
+    <button class="retry-btn" onclick="retryExam()">Retake with new questions →</button>
+  </div>
+
+</div>
+<script>
+const ALL=[
+  {ch:1,chl:'Ch.1 — Investment & Savings',d:'beginner',q:'What is the main purpose of investing money rather than just saving it in cash?',opts:['To avoid paying taxes on your income','To grow your money over time so it outpaces inflation','To keep your money safe from any possible loss','To make your money available instantly at all times'],a:1,exp:'Saving cash keeps your money safe, but inflation slowly erodes its purchasing power. Investing aims to grow your money at a rate that outpaces inflation.'},
+  {ch:1,chl:'Ch.1 — Investment & Savings',d:'beginner',q:'What does GIC stand for and what is its primary feature?',opts:['General Investment Contract — earns variable returns','Guaranteed Income Certificate — provides lifetime income','Guaranteed Investment Certificate — offers a guaranteed rate of return','Group Investment Contract — held by employers'],a:2,exp:'A GIC (Guaranteed Investment Certificate) deposits money for a fixed term at a guaranteed interest rate. You know exactly what you\'ll get back.'},
+  {ch:1,chl:'Ch.1 — Investment & Savings',d:'beginner',q:'Why do advisors recommend diversifying across different asset types?',opts:['To guarantee a specific return each year','To reduce the impact of any single investment performing poorly','To eliminate all investment risk entirely','To qualify for government insurance on all holdings'],a:1,exp:'Diversification spreads risk. A loss in one area is offset by gains in others. It doesn\'t eliminate risk — it manages it.'},
+  {ch:1,chl:'Ch.1 — Investment & Savings',d:'beginner',q:'What is inflation risk in the context of investing?',opts:['The risk that an investment company goes bankrupt','The risk that your investment loses value when markets crash','The risk that your returns don\'t keep up with rising prices, reducing purchasing power','The risk of lending money to a borrower who can\'t repay'],a:2,exp:'Inflation risk means even if your investment earns a positive return, inflation could make your money buy less than before.'},
+  {ch:1,chl:'Ch.1 — Investment & Savings',d:'intermediate',q:'An investor puts $10,000 into a fund earning 7% compounded annually for 10 years. Approximately how much will it be worth?',opts:['$17,000','$19,672','$14,000','$21,500'],a:1,exp:'$10,000 × (1.07)^10 ≈ $19,672. The power of compounding — nearly doubling money without adding a single extra dollar.'},
+  {ch:1,chl:'Ch.1 — Investment & Savings',d:'intermediate',q:'Interest rate risk affects bond prices in which of the following ways?',opts:['When interest rates rise, bond prices rise','When interest rates fall, bond prices fall','When interest rates rise, bond prices fall','Interest rates have no effect on bond prices'],a:2,exp:'Bonds pay a fixed rate. When new bonds are issued at higher rates, existing bonds become less attractive — so their market price drops.'},
+  {ch:1,chl:'Ch.1 — Investment & Savings',d:'intermediate',q:'What is a key structural difference between an ETF and a mutual fund?',opts:['ETFs are only available for registered accounts','ETFs trade on stock exchanges throughout the day; mutual funds are priced once daily at close','ETFs are guaranteed by the government','ETFs have higher MERs than mutual funds on average'],a:1,exp:'ETFs trade on exchanges like stocks — any time during market hours. Mutual funds are only priced once per day after market close.'},
+  {ch:1,chl:'Ch.1 — Investment & Savings',d:'advanced',q:'A portfolio contains Canadian equities, Canadian bonds, and Canadian real estate. Is this portfolio truly diversified?',opts:['Yes — it contains three different asset classes','No — all assets are in the same country, creating concentrated geographic and economic risk','Yes — equities and bonds move in opposite directions providing full protection','No — true diversification requires at least 10 different asset classes'],a:1,exp:'Asset class diversification is only one dimension. This portfolio has geographic concentration — all assets are exposed to Canadian economic conditions.'},
+  {ch:1,chl:'Ch.1 — Investment & Savings',d:'advanced',q:'A client asks about cryptocurrency as part of their LLQP-licensed portfolio recommendation. What is the advisor\'s correct position?',opts:['Recommend it freely — crypto has high return potential','Crypto is not a licensed product under the LLQP — advisors cannot recommend it; refer to a registered securities dealer','Recommend it only for clients under 40','Include it as a small portion of any growth portfolio automatically'],a:1,exp:'The LLQP license covers insurance products only. Recommending cryptocurrency would be acting outside your licensed scope — a serious regulatory violation.'},
+  {ch:2,chl:'Ch.2 — Segregated Funds',d:'beginner',q:'A segregated fund is legally classified as which type of product?',opts:['A mutual fund registered with the securities commission','An insurance contract issued by a life insurance company','A bank deposit product covered by CDIC','A government-registered pension plan'],a:1,exp:'Segregated funds are individual variable insurance contracts — not mutual funds. They are issued and backed by life insurance companies.'},
+  {ch:2,chl:'Ch.2 — Segregated Funds',d:'beginner',q:'What does a 75% maturity guarantee on a segregated fund mean?',opts:['The fund will grow by at least 75% by maturity','The client is guaranteed to receive at least 75% of total deposits at the contract maturity date','75% of the fund is invested in guaranteed products','The advisor receives 75% of the MER as commission'],a:1,exp:'A 75% maturity guarantee means the insurance company guarantees the client will receive at least 75 cents for every dollar deposited — regardless of how the fund performs.'},
+  {ch:2,chl:'Ch.2 — Segregated Funds',d:'beginner',q:'What does Assuris protect against in the context of segregated funds?',opts:['Market losses when the fund underperforms','The failure of the life insurance company that issued the seg fund contract','Tax owing on seg fund gains','Fraudulent activity by the advisor'],a:1,exp:'Assuris is the Canadian industry-funded protection plan for life insurance policyholders. If a member life insurance company becomes insolvent, Assuris steps in to protect policyholders\' guaranteed benefits.'},
+  {ch:2,chl:'Ch.2 — Segregated Funds',d:'intermediate',q:'A client deposits $80,000 into a seg fund with a 75% maturity guarantee. The fund declines to $45,000 at maturity. How much does the client receive?',opts:['$45,000 — the actual market value','$60,000 — 75% of the original deposit','$80,000 — full return of capital','$67,500 — 75% of the peak value'],a:1,exp:'75% of $80,000 = $60,000. Since the market value ($45,000) is less than the guarantee ($60,000), the insurance company makes up the difference.'},
+  {ch:2,chl:'Ch.2 — Segregated Funds',d:'intermediate',q:'What is a Guaranteed Minimum Withdrawal Benefit (GMWB)?',opts:['A guarantee that the fund will never lose value','A feature allowing withdrawal of a set percentage annually, guaranteed for life regardless of market performance','A government benefit supplementing seg fund income','A one-time lump sum payment guaranteed at contract maturity'],a:1,exp:'A GMWB allows the contract holder to withdraw a set percentage of their guaranteed income base each year — typically 4-5% — for the rest of their life, even if the fund\'s market value drops to zero.'},
+  {ch:2,chl:'Ch.2 — Segregated Funds',d:'advanced',q:'A client deposits $80,000, resets when the market value reaches $120,000. The fund drops to $95,000 when the client dies. The contract has a 100% death benefit guarantee. How much do beneficiaries receive?',opts:['$80,000 — the original deposit','$95,000 — the current market value','$120,000 — the reset value becomes the new death benefit base','$100,000 — an average of all values'],a:2,exp:'When a reset occurs, the locked-in value ($120,000) becomes the new deposit base for guarantee purposes including the death benefit. Since market value ($95,000) is lower, beneficiaries receive $120,000.'},
+  {ch:2,chl:'Ch.2 — Segregated Funds',d:'advanced',q:'A 70-year-old client with low risk tolerance needs steady income and is considering an emerging markets tech specialty fund. What is the advisor\'s obligation?',opts:['Recommend it — the client asked for it','Recommend it with a verbal warning','Decline to recommend it, document that it is unsuitable, and offer appropriate alternatives','Recommend it only if the client signs a risk acknowledgment waiver'],a:2,exp:'Suitability is the advisor\'s core obligation. An emerging markets tech fund is high-risk and inappropriate for a 70-year-old with low risk tolerance. The advisor must document concerns and recommend suitable alternatives.'},
+  {ch:3,chl:'Ch.3 — Annuities',d:'beginner',q:'What is an annuity in simple terms?',opts:['A type of life insurance that pays a lump sum at death','A contract where you give a lump sum to an insurance company in exchange for regular income payments','A government pension plan for low-income earners','A savings account that earns guaranteed interest'],a:1,exp:'An annuity converts a lump sum into a stream of regular income payments. You give the insurance company money, and they promise to pay you back over time — either for a set period or for the rest of your life.'},
+  {ch:3,chl:'Ch.3 — Annuities',d:'beginner',q:'What is the defining feature of a life annuity?',opts:['Payments stop after exactly 10 years','Payments continue for the rest of the annuitant\'s life, no matter how long they live','Payments are made as a single lump sum at retirement','Payments are guaranteed only if the annuitant is healthy'],a:1,exp:'A life annuity guarantees income for as long as the annuitant lives — the insurance company takes on the longevity risk.'},
+  {ch:3,chl:'Ch.3 — Annuities',d:'intermediate',q:'A client buys a life annuity with a 10-year guarantee period and dies after 3 years. What happens?',opts:['Payments stop immediately','Payments continue to the named beneficiary for the remaining 7 years','The insurance company refunds the original deposit','Payments continue for the annuitant\'s original life expectancy'],a:1,exp:'A guarantee period ensures payments are made for at least the specified years. If the client dies after 3 years of a 10-year guarantee, the beneficiary receives payments for the remaining 7 years.'},
+  {ch:3,chl:'Ch.3 — Annuities',d:'intermediate',q:'A client uses RRSP funds to purchase an annuity. How are the payments taxed?',opts:['Payments are partially tax-free as a return of capital','Payments are fully taxable as ordinary income in the year received','Payments are taxed as capital gains at 50% inclusion','Payments are completely tax-free since RRSP funds were already taxed'],a:1,exp:'RRSP contributions were pre-tax dollars that grew tax-deferred. Every dollar of annuity payment from registered funds is fully taxable as ordinary income.'},
+  {ch:3,chl:'Ch.3 — Annuities',d:'intermediate',q:'How does a prescribed annuity reduce the tax burden for a non-registered holder?',opts:['All payments are fully tax-free','The interest portion is front-loaded — highest in early years','The taxable interest portion is blended evenly across all payments, keeping the annuitant in a stable tax bracket','Prescribed annuities convert interest income into capital gains'],a:2,exp:'In a prescribed annuity, the blend of taxable interest and non-taxable return of capital is level across all payments — allowing retirees to predict their tax bill precisely each year.'},
+  {ch:3,chl:'Ch.3 — Annuities',d:'advanced',q:'A couple purchases a joint life annuity where payments reduce to 60% on the death of the first annuitant. Initial payment is $3,000/month. The husband dies. What does the wife receive?',opts:['$3,000 — payments never change','$1,800 — 60% of $3,000','$1,200 — 40% of the original payment','$2,400 — 80% of the original payment'],a:1,exp:'A joint life annuity with 60% continuation means the surviving spouse receives 60% of the original joint income. 60% of $3,000 = $1,800/month.'},
+  {ch:4,chl:'Ch.4 — Investor Profile',d:'beginner',q:'What does KYC stand for and why is it required?',opts:['Keep Your Capital — to protect the client\'s principal','Know Your Client — to gather information needed to make suitable recommendations','Know Your Competition — to compare products across insurers','Keep Your Compliance — to satisfy internal audit requirements'],a:1,exp:'KYC (Know Your Client) is a regulatory requirement obligating advisors to gather comprehensive information about a client before making any recommendation.'},
+  {ch:4,chl:'Ch.4 — Investor Profile',d:'beginner',q:'What is the primary tax benefit of contributing to an RRSP?',opts:['Contributions are taxed at a lower capital gains rate','Contributions are tax-deductible, reducing taxable income in the year of contribution','Withdrawals are always completely tax-free','There is no contribution limit'],a:1,exp:'RRSP contributions are deducted from your taxable income in the year you contribute. The money then grows tax-sheltered inside the RRSP.'},
+  {ch:4,chl:'Ch.4 — Investor Profile',d:'beginner',q:'What is the defining feature of the TFSA?',opts:['Contributions are tax-deductible like an RRSP','Withdrawals are taxed as ordinary income','Investment growth and withdrawals are completely tax-free','TFSA accounts can only hold cash and GICs'],a:2,exp:'The TFSA\'s defining feature: all growth inside the account is completely tax-free, and withdrawals are never taxed. Unlike the RRSP, contributions are not deductible.'},
+  {ch:4,chl:'Ch.4 — Investor Profile',d:'intermediate',q:'What is the difference between a client\'s risk capacity and their risk tolerance?',opts:['They mean the same thing','Risk capacity is the financial ability to absorb losses; risk tolerance is the emotional willingness to accept risk','Risk tolerance is measured by the advisor; risk capacity is self-reported','Risk capacity applies only to registered accounts'],a:1,exp:'Risk capacity is objective — determined by the client\'s financial situation. Risk tolerance is subjective — the client\'s emotional comfort with seeing their portfolio decline.'},
+  {ch:4,chl:'Ch.4 — Investor Profile',d:'intermediate',q:'How can a spousal RRSP be used as an income-splitting strategy?',opts:['Both spouses share the RRSP and pay equal tax on withdrawals','The higher-income spouse contributes to the lower-income spouse\'s RRSP, so withdrawals are taxed in the lower-income spouse\'s hands','The spousal RRSP converts the higher earner\'s income to capital gains','Spousal RRSP contributions are tax-free for both spouses'],a:1,exp:'A spousal RRSP allows the higher-earning spouse to claim the tax deduction at their higher rate, while funds are eventually withdrawn and taxed at the lower-income spouse\'s lower rate.'},
+  {ch:4,chl:'Ch.4 — Investor Profile',d:'advanced',q:'A client has a net worth of $2 million but all assets are illiquid. Their liquid investable assets are $50,000. How should the advisor treat their risk profile?',opts:['As high risk — net worth of $2 million supports aggressive investing','As conservative to moderate — suitability must be based on liquid investable assets','As moderate — split the difference between liquid and illiquid assets','As aggressive — total net worth is the only relevant metric'],a:1,exp:'Suitability is assessed on what the client can actually invest. With only $50,000 liquid, a significant loss would be devastating. The advisor must treat the $50,000 conservatively even if the client feels wealthy.'},
+  {ch:5,chl:'Ch.5 — Recommendations',d:'beginner',q:'Before recommending a seg fund to a client, what must an advisor complete first?',opts:['A product brochure review only','A full KYC assessment covering financial situation, goals, risk tolerance and time horizon','A credit check to assess borrowing capacity','A review of competing mutual fund products'],a:1,exp:'No recommendation can be made without completing the KYC process first. Skipping KYC and recommending a product is a compliance violation regardless of how good the product is.'},
+  {ch:5,chl:'Ch.5 — Recommendations',d:'beginner',q:'When must Fund Facts be delivered to the client in a seg fund transaction?',opts:['Within 30 days after the purchase is complete','Before or at the point of sale — the client must receive it before committing','Only if the client specifically requests it','At the annual review meeting'],a:1,exp:'Fund Facts must be delivered before or at the point of sale — this is a regulatory requirement. It gives the client key information before they commit their money.'},
+  {ch:5,chl:'Ch.5 — Recommendations',d:'intermediate',q:'Why is the contract maturity date a critical element to disclose when recommending a seg fund?',opts:['Because the maturity date determines the MER charged','Because the maturity guarantee only applies if the contract is held to maturity — early surrender forfeits the guarantee','Because clients cannot make withdrawals until maturity','Because the maturity date determines the beneficiary payout schedule'],a:1,exp:'The maturity guarantee only activates at the contract maturity date. If the client surrenders early, they receive only the market value. Recommending a 10-year contract to a client who may need funds in 5 years is a suitability failure.'},
+  {ch:5,chl:'Ch.5 — Recommendations',d:'intermediate',q:'A client\'s life circumstances change significantly — they divorce, lose their job, and have a new dependent. What is the advisor\'s obligation?',opts:['No obligation — recommendations are only made at point of sale','Review all existing recommendations to determine whether they remain suitable, update KYC, and make new recommendations if necessary','Contact the insurance company only','Wait for the annual review regardless of significance of changes'],a:1,exp:'KYC is an ongoing obligation. Material life changes can fundamentally alter whether existing products remain suitable. An advisor must proactively review the client\'s file.'},
+  {ch:5,chl:'Ch.5 — Recommendations',d:'advanced',q:'An advisor is choosing between two nearly identical seg funds — one paying 1% trailing commission and one paying 0.5%. The client\'s profile suits both equally. What is the ethical obligation?',opts:['Choose the higher-commission fund — advisors deserve fair compensation','Choose the lower-commission fund as a sign of good faith','Document that both funds are equally suitable, disclose the commission difference to the client, and recommend based on the client\'s best interest','Recommend both funds and split the investment equally'],a:2,exp:'When two products are equally suitable, compensation must not be the deciding factor. Advisors must disclose conflicts of interest and make recommendations independent of personal financial gain.'},
+  {ch:6,chl:'Ch.6 — Seg Fund Contracts',d:'beginner',q:'In a segregated fund contract, who are the three main parties?',opts:['The bank, the advisor, and the client','The insurer, the contract holder (owner), and the annuitant (life insured)','The government, the insurer, and the beneficiary','The advisor, the fund manager, and the client'],a:1,exp:'Every seg fund contract involves: the Insurer who issues and backs the contract; the Contract Holder who deposits money and controls the contract; and the Annuitant whose life the insurance guarantees are based on.'},
+  {ch:6,chl:'Ch.6 — Seg Fund Contracts',d:'beginner',q:'A client gives the advisor a cheque payable to the advisor personally for a seg fund deposit. What must the advisor do?',opts:['Accept it — it\'s easier for the client','Return the cheque — deposits must be payable to the insurance company, not the advisor personally','Cash it and forward the funds to the insurer','Hold it for 5 business days before forwarding'],a:1,exp:'A cheque payable to the advisor personally is a major red flag and a regulatory violation. Client funds must be deposited directly to the insurer. This is called "commingling of funds" and can result in licence suspension.'},
+  {ch:6,chl:'Ch.6 — Seg Fund Contracts',d:'intermediate',q:'A client wants to change the beneficiary on their seg fund. What must the advisor verify first?',opts:['The client\'s credit score','Whether the current beneficiary designation is revocable or irrevocable','The current market value of the fund','Whether the annuity has been annuitized'],a:1,exp:'Before processing any beneficiary change, the advisor must confirm whether the existing designation is revocable (changeable freely) or irrevocable (requiring the current beneficiary\'s written consent to change).'},
+  {ch:6,chl:'Ch.6 — Seg Fund Contracts',d:'intermediate',q:'A seg fund contract reaches maturity. Market value is $95,000 and the 75% guarantee is $82,500. What does the client receive?',opts:['$82,500 — the guarantee amount','$95,000 — the higher market value','$110,000 — the full deposit amount','$92,750 — an average of both values'],a:1,exp:'At maturity, the client always receives the greater of the market value or the guaranteed amount. Market value ($95,000) exceeds the guarantee ($82,500), so the client receives $95,000.'},
+  {ch:6,chl:'Ch.6 — Seg Fund Contracts',d:'advanced',q:'A contract holder dies naming their estate as beneficiary on a seg fund. What are the consequences compared to naming a spouse directly?',opts:['No difference — all beneficiary designations produce the same outcome','The death benefit flows into the estate — subject to probate fees, creditor claims, delays, and public record — all avoided when a named beneficiary receives funds directly','The estate receives a tax deduction on the death benefit','The insurance company pays a bonus when the estate is the beneficiary'],a:1,exp:'Naming the estate as beneficiary eliminates all key advantages of a seg fund\'s insurance structure. The death benefit enters the estate and is subject to probate fees, creditor claims, delays, and public disclosure.'},
+  {ch:6,chl:'Ch.6 — Seg Fund Contracts',d:'advanced',q:'A client has a seg fund with $100,000 in deposits and a 75% guarantee. They withdraw $20,000 (20% of market value). How does this affect the maturity guarantee?',opts:['The guarantee stays at $75,000','The guarantee is reduced proportionally — the deposit base is reduced by 20%, so the new guarantee is $60,000','The guarantee is eliminated entirely after any withdrawal','The guarantee increases to compensate for the withdrawal'],a:1,exp:'Withdrawals reduce the guarantee base proportionally. 20% withdrawal reduces the $100,000 deposit base by 20% to $80,000. New maturity guarantee = $80,000 × 75% = $60,000.'},
+  {ch:7,chl:'Ch.7 — Annuity Contracts',d:'beginner',q:'Why is naming a beneficiary on an annuity contract important for estate planning?',opts:['It increases the monthly income payment','It ensures any remaining guaranteed payments bypass probate and go directly to the named beneficiary upon death','It reduces the tax owed on annuity income','It allows the beneficiary to take over the annuity contract'],a:1,exp:'Like seg funds, annuity contracts allow a named beneficiary to receive any remaining guaranteed payments directly — bypassing the estate and avoiding probate.'},
+  {ch:7,chl:'Ch.7 — Annuity Contracts',d:'beginner',q:'Two years after setting up a life annuity, a client asks if they can add a joint life option for their new spouse. What should the advisor tell them?',opts:['Yes — annuity terms can be modified at any time','No — once a payout annuity has begun, the terms are locked and cannot be changed','Yes — but only if the insurer agrees in writing','Yes — a rider can be added for an additional premium'],a:1,exp:'Once a payout annuity is in force and payments have begun, the contract terms are irrevocable. The joint life option must be elected at the time of application.'},
+  {ch:7,chl:'Ch.7 — Annuity Contracts',d:'intermediate',q:'In a joint life annuity, the first annuitant dies. What happens to the surviving spouse\'s payments?',opts:['All payments stop immediately','Payments continue to the surviving spouse — at the same level or reduced percentage as specified in the contract','The insurer returns the original premium to the surviving spouse','The surviving spouse must purchase a new single life annuity'],a:1,exp:'A joint life annuity continues after the first death — that\'s its defining purpose. The surviving spouse receives income for the rest of their life, at the level specified in the contract.'},
+  {ch:7,chl:'Ch.7 — Annuity Contracts',d:'intermediate',q:'A client surrenders a registered annuity. What are the tax consequences?',opts:['No tax — registered annuities can always be surrendered tax-free','The full surrender value is added to the client\'s income in the year of surrender and taxed at their marginal rate','Only 50% of the gain is included as a capital gain','Tax is deferred until the following year'],a:1,exp:'Surrendering a registered annuity triggers immediate and full taxation. The entire surrender value is treated as income in the year received. Advisors must ensure clients understand this before recommending surrender.'},
+  {ch:7,chl:'Ch.7 — Annuity Contracts',d:'advanced',q:'A married client with a $400,000 registered annuity dies. They named their spouse as successor annuitant. What happens?',opts:['The annuity is included in the deceased\'s estate and taxed immediately','The annuity rolls over to the surviving spouse — no deemed disposition occurs at death, and the spouse continues receiving income taxed in their hands','The full $400,000 is taxable on the deceased\'s final return','The insurer pays out a lump sum to the surviving spouse tax-free'],a:1,exp:'The successor annuitant designation allows a seamless tax-free rollover to the surviving spouse. No deemed disposition occurs at death — the registered annuity simply transfers and the spouse continues receiving income.'},
+  {ch:7,chl:'Ch.7 — Annuity Contracts',d:'advanced',q:'During an annuity application, a client mentions the $250,000 premium was a gift from an overseas business contact they\'ve never met. What should the advisor do?',opts:['Proceed normally — the client has provided a reasonable explanation','Treat this as a potential suspicious transaction: pause, ask further questions, document all information, and consider filing an STR with FINTRAC','Complete the transaction and report it only if the client is later charged','Require a statutory declaration and then proceed'],a:1,exp:'A $250,000 gift from an unknown overseas contact is a significant AML red flag. The advisor must ask probing questions, document the responses, and if suspicious, file a Suspicious Transaction Report with FINTRAC.'},
+  {ch:8,chl:'Ch.8 — Group Retirement Plans',d:'beginner',q:'What is the fundamental difference between a DBPP and a DCPP pension plan?',opts:['DBPPs are only available to government employees; DCPPs are for private sector','In a DBPP the retirement benefit is predetermined and the employer bears investment risk; in a DCPP the contribution is fixed but retirement benefit depends on investment performance — the member bears investment risk','DBPPs allow members to choose their investments; DCPPs do not','DCPPs are funded entirely by the government; DBPPs are employer-funded'],a:1,exp:'DBPP: the employer promises a specific monthly income at retirement and bears investment risk. DCPP: contributions are defined, but retirement income depends on investment performance — investment risk falls on the employee.'},
+  {ch:8,chl:'Ch.8 — Group Retirement Plans',d:'beginner',q:'What does vesting mean in the context of a group pension plan?',opts:['The process of selecting investment funds within the plan','The point at which an employee becomes entitled to the employer\'s contributions to their pension — even if they leave the company','The government approval process for new pension plans','The conversion of pension assets to annuity income at retirement'],a:1,exp:'Vesting determines when an employee gains ownership of employer contributions. Before vesting, if an employee leaves, they may forfeit employer contributions. After vesting, they take those contributions with them.'},
+  {ch:8,chl:'Ch.8 — Group Retirement Plans',d:'intermediate',q:'How does a pension adjustment (PA) affect a plan member\'s RRSP contribution room?',opts:['It increases RRSP room — pension plan members get bonus room','It reduces RRSP room — the PA accounts for the retirement benefit building up in the workplace plan, preventing double tax sheltering','It has no effect on RRSP room','It only affects RRSP room if the employee is also self-employed'],a:1,exp:'The pension adjustment prevents double-dipping — saving tax-sheltered dollars in both a workplace pension and an RRSP beyond what the rules allow.'},
+  {ch:8,chl:'Ch.8 — Group Retirement Plans',d:'intermediate',q:'An employee leaves a company with a vested balance in a group DCPP. What are their options?',opts:['They must leave the money in the employer\'s plan permanently','They can transfer the vested balance to a LIRA, transfer to a new employer\'s plan if permitted, or take a cash payment (fully taxable)','They automatically receive a monthly pension immediately','They must purchase an annuity with the funds within 60 days'],a:1,exp:'When an employee leaves a DCPP, the most common choice is a transfer to a LIRA — a locked-in version of an RRSP that preserves tax-deferred status.'},
+  {ch:8,chl:'Ch.8 — Group Retirement Plans',d:'advanced',q:'A plan sponsor of a DBPP discovers the pension fund is underfunded. What is the sponsor\'s obligation?',opts:['Notify members and reduce their promised benefits immediately','Make special payments to fund the deficit and bring the plan back to full funding — regulators may impose a remediation schedule','Transfer the liability to the government','Terminate the plan and distribute remaining assets pro-rata'],a:1,exp:'In a DBPP, the plan sponsor bears all funding risk. If the plan becomes underfunded, the sponsor must make additional contributions to eliminate the deficit within regulatory timelines.'},
+  {ch:8,chl:'Ch.8 — Group Retirement Plans',d:'advanced',q:'A plan administrator reports 60% of DCPP members have never changed their investment selections from the default. What should the advisor recommend?',opts:['Nothing — if members are comfortable with the default, there\'s no issue','Automatically move all members to the advisor\'s recommended portfolio without consent','Implement a member education program: investment guides, group seminars, individual consultations for members nearing retirement, and review whether the default fund is appropriate','Replace all fund options with a single balanced fund to simplify decisions'],a:2,exp:'Member engagement is a key indicator of plan health. 60% default adherence suggests members haven\'t engaged with retirement planning. The response should be a structured education initiative.'}
+];
+
+let examQ=[],current=0,score=0,answered=0,timerInt=null,secondsLeft=90*60,startTime=null,chScores={};
+
+function shuffle(arr){return [...arr].sort(()=>Math.random()-0.5);}
+
+function selectQ(){
+  const by={};
+  ALL.forEach(q=>{if(!by[q.ch])by[q.ch]=[];by[q.ch].push(q);});
+  const sel=[];
+  Object.keys(by).forEach(ch=>sel.push(...shuffle(by[ch]).slice(0,7)));
+  return shuffle(sel).slice(0,50);
+}
+
+function startExam(){
+  examQ=selectQ(); current=0; score=0; answered=0; chScores={};
+  examQ.forEach(q=>{if(!chScores[q.ch])chScores[q.ch]={label:q.chl,correct:0,total:0};chScores[q.ch].total++;});
+  document.getElementById('startCard').style.display='none';
+  document.getElementById('examWrap').style.display='block';
+  document.getElementById('timerDisplay').style.display='flex';
+  startTime=Date.now();
+  timerInt=setInterval(()=>{
+    secondsLeft--;
+    const m=Math.floor(secondsLeft/60),s=secondsLeft%60;
+    document.getElementById('timerVal').textContent=`${m}:${s.toString().padStart(2,'0')}`;
+    const tb=document.getElementById('timerDisplay');
+    if(secondsLeft<=300)tb.classList.add('warning');
+    if(secondsLeft<=0){clearInterval(timerInt);showResults();}
+  },1000);
+  render();
+}
+
+function render(){
+  const q=examQ[current];
+  document.getElementById('qNumD').textContent=current+1;
+  document.getElementById('progFill').style.width=`${(current/50)*100}%`;
+  document.getElementById('qNum').textContent=`QUESTION ${current+1} OF 50`;
+  document.getElementById('chTag').textContent=q.chl;
+  const pill=document.getElementById('diffPill');
+  pill.textContent=q.d.charAt(0).toUpperCase()+q.d.slice(1);
+  pill.className='diff-pill '+q.d;
+  document.getElementById('qText').textContent=q.q;
+  document.getElementById('exp').classList.remove('visible');
+  document.getElementById('expText').textContent=q.exp;
+  const c=document.getElementById('opts');c.innerHTML='';
+  q.opts.forEach((opt,i)=>{
+    const div=document.createElement('div');div.className='option';
+    div.innerHTML=`<span class="opt-l">${String.fromCharCode(65+i)}</span><span>${opt}</span>`;
+    div.onclick=()=>sel(div,i===q.a,i,q.a);c.appendChild(div);
+  });
+  const nb=document.getElementById('nextBtn');
+  nb.disabled=true;
+  nb.className=current===49?'finish-btn':'next-btn';
+  nb.textContent=current===49?'Finish exam →':'Next →';
+  document.getElementById('fl').textContent='Select an answer to continue';
+}
+
+function sel(el,ok,chosen,correct){
+  document.querySelectorAll('.option').forEach((o,i)=>{o.onclick=null;o.classList.add('disabled');if(i===correct)o.classList.add('correct');});
+  if(!ok)el.classList.add('wrong');
+  document.getElementById('exp').classList.add('visible');
+  document.getElementById('nextBtn').disabled=false;
+  answered++;
+  const q=examQ[current];
+  if(ok){score++;chScores[q.ch].correct++;}
+  document.getElementById('cCount').textContent=score;
+  document.getElementById('wCount').textContent=answered-score;
+  document.getElementById('fl').textContent=ok?'✓ Correct':'✗ Incorrect';
+}
+
+function next(){
+  current++;
+  if(current>=examQ.length){showResults();return;}
+  render();
+}
+
+function showResults(){
+  clearInterval(timerInt);
+  document.getElementById('examWrap').style.display='none';
+  document.getElementById('timerDisplay').style.display='none';
+  const rw=document.getElementById('resultsWrap');
+  rw.classList.add('visible');
+  const pct=Math.round((score/50)*100),pass=pct>=60;
+  document.getElementById('resPct').textContent=pct+'%';
+  document.getElementById('resPct').className='result-pct '+(pass?'pass':'fail');
+  document.getElementById('resVerdict').textContent=pass?'✓ You passed!':'✗ Not yet — keep practising';
+  document.getElementById('resSub').textContent=pass?`You scored ${score} out of 50. You\'re ready for the real exam.`:`You scored ${score} out of 50. Pass mark is 60% (30 correct). Review the chapters below.`;
+  document.getElementById('rC').textContent=score;
+  document.getElementById('rW').textContent=50-score;
+  document.getElementById('rP').textContent=pct+'%';
+  const el=Math.floor((Date.now()-startTime)/1000);
+  document.getElementById('rT').textContent=`${Math.floor(el/60)}m ${el%60}s`;
+  const bd=document.getElementById('chBreakdown');bd.innerHTML='';
+  Object.keys(chScores).sort((a,b)=>a-b).forEach(ch=>{
+    const cs=chScores[ch],cpct=cs.total>0?Math.round((cs.correct/cs.total)*100):0;
+    const bc=cpct>=70?'good':cpct>=50?'mid':'low';
+    bd.innerHTML+=`<div class="ch-row"><div class="ch-lbl">${cs.label}</div><div class="ch-bar-wrap"><div class="ch-bar ${bc}" style="width:${cpct}%"></div></div><div class="ch-pct">${cpct}%</div></div>`;
+  });
+}
+
+function retryExam(){
+  clearInterval(timerInt);secondsLeft=90*60;
+  document.getElementById('timerVal').textContent='90:00';
+  document.getElementById('timerDisplay').classList.remove('warning');
+  document.getElementById('resultsWrap').classList.remove('visible');
+  document.getElementById('startCard').style.display='block';
+}
+</script>
+</body>
+</html>
