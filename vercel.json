@@ -1,8 +1,3 @@
 {
-  "version": 2,
-  "routes": [
-    { "src": "/", "dest": "/index.html" },
-    { "src": "/chapter1", "dest": "/chapter1.html" },
-    { "src": "/mock", "dest": "/mock.html" }
-  ]
+  "version": 2
 }
