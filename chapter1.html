@@ -10,15 +10,43 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root { --blue:#185FA5; --blue-light:#E6F1FB; --green:#0F6E56; --red:#993C1D; --text:#0F1117; --muted:#6B7280; --border:#E5E7EB; --bg:#F9FAFB; --white:#fff; --radius:12px; }
     body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
-    nav { background: var(--white); border-bottom: 1px solid var(--border); padding: 0 20px; height: 56px; display: flex; align-items: center; justify-content: space-between; }
-    .nav-logo { font-family: 'Sora', sans-serif; font-size: 17px; font-weight: 700; }
+    nav { background: var(--white); border-bottom: 1px solid var(--border); padding: 0 20px; height: 56px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+    .nav-logo { font-family: 'Sora', sans-serif; font-size: 17px; font-weight: 700; cursor: pointer; }
     .nav-logo span { color: var(--blue); }
-    .nav-back { font-size: 13px; color: var(--muted); cursor: pointer; display: flex; align-items: center; gap: 6px; }
-    .wrap { max-width: 680px; margin: 0 auto; padding: 20px 16px 40px; }
-    .quiz-header { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 20px; margin-bottom: 14px; }
+    .nav-back { font-size: 13px; color: var(--muted); cursor: pointer; display: flex; align-items: center; gap: 5px; }
+    .wrap { max-width: 720px; margin: 0 auto; padding: 20px 16px 60px; }
+
+    /* TAB BAR */
+    .tab-bar { display: flex; gap: 4px; background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 4px; margin-bottom: 20px; }
+    .tab { flex: 1; padding: 9px; text-align: center; font-size: 13px; font-weight: 500; color: var(--muted); cursor: pointer; border-radius: 9px; transition: all 0.15s; }
+    .tab.active { background: var(--blue); color: #fff; }
+
+    /* TUTORIAL */
+    .tutorial-wrap { display: none; }
+    .tutorial-wrap.visible { display: block; }
+    .tut-header { background: var(--blue); color: #fff; border-radius: var(--radius); padding: 24px; margin-bottom: 16px; }
+    .tut-header h1 { font-family: 'Sora', sans-serif; font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+    .tut-header p { font-size: 13px; opacity: 0.85; line-height: 1.6; }
+    .tut-section { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px; margin-bottom: 12px; }
+    .tut-section h2 { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 10px; display: flex; align-items: center; gap: 9px; }
+    .tut-icon { font-size: 18px; }
+    .tut-section p { font-size: 13px; color: var(--muted); line-height: 1.8; margin-bottom: 8px; }
+    .tut-section p:last-child { margin-bottom: 0; }
+    .tut-callout { background: var(--blue-light); border-left: 3px solid var(--blue); border-radius: 0 8px 8px 0; padding: 12px 14px; margin-top: 10px; font-size: 13px; color: var(--text); line-height: 1.7; }
+    .tut-callout strong { color: var(--blue); }
+    .tut-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; }
+    .tut-table th { background: var(--blue-light); color: var(--blue); padding: 8px 10px; text-align: left; font-weight: 600; }
+    .tut-table td { padding: 8px 10px; border-top: 1px solid var(--border); color: var(--muted); }
+    .tut-table tr:nth-child(even) td { background: var(--bg); }
+    .start-quiz-btn { width: 100%; background: var(--blue); color: #fff; border: none; padding: 14px; border-radius: var(--radius); font-size: 15px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; margin-top: 8px; }
+
+    /* QUIZ */
+    .quiz-wrap { display: none; }
+    .quiz-wrap.visible { display: block; }
+    .quiz-header { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 18px; margin-bottom: 14px; }
     .quiz-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
     .quiz-label { font-size: 14px; font-weight: 600; color: var(--text); }
-    .score-row { display: flex; gap: 10px; }
+    .score-row { display: flex; gap: 8px; }
     .s-badge { background: var(--bg); border-radius: 6px; padding: 4px 10px; font-size: 12px; color: var(--muted); }
     .s-badge strong { color: var(--text); }
     .prog-bar { height: 4px; background: var(--border); border-radius: 2px; }
@@ -44,13 +72,14 @@
     .exp.visible { display: block; }
     .exp-lbl { font-size: 11px; font-weight: 600; color: var(--blue); margin-bottom: 5px; }
     .exp p { font-size: 13px; color: var(--muted); line-height: 1.6; }
-    .footer { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; }
-    .diff-dots { display: flex; gap: 4px; align-items: center; }
-    .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--border); }
-    .dot.on { background: var(--blue); }
-    .diff-label { font-size: 12px; color: var(--muted); margin-left: 7px; }
+    .footer { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 18px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .footer-left { display: flex; align-items: center; gap: 8px; }
+    .prev-btn { background: var(--bg); border: 1.5px solid var(--border); color: var(--text); padding: 9px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; }
+    .prev-btn:disabled { opacity: 0.3; cursor: default; }
     .next-btn { background: var(--blue); color: #fff; border: none; padding: 9px 22px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; }
     .next-btn:disabled { opacity: 0.35; cursor: default; }
+
+    /* RESULTS */
     .results { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 36px; text-align: center; display: none; }
     .results.visible { display: block; }
     .res-pct { font-family: 'Sora', sans-serif; font-size: 52px; font-weight: 700; color: var(--blue); margin-bottom: 8px; }
@@ -63,155 +92,288 @@
     .unlock-banner h3 { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
     .unlock-banner p { font-size: 13px; opacity: 0.85; margin-bottom: 14px; }
     .unlock-btn { background: #fff; color: var(--blue); border: none; padding: 10px 22px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; }
-    .retry-btn { background: var(--bg); border: 1.5px solid var(--border); color: var(--text); padding: 10px 22px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; }
+    .retry-btn { background: var(--bg); border: 1.5px solid var(--border); color: var(--text); padding: 10px 22px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; margin-right: 8px; }
+    .tut-btn { background: var(--blue-light); border: none; color: var(--blue); padding: 10px 22px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; }
   </style>
 </head>
 <body>
 <nav>
-  <div class="nav-logo">Pass<span>LLQP</span></div>
-  <div class="nav-back" onclick="location.href='index.html'">← Back to home</div>
+  <div class="nav-logo" onclick="location.href='index.html'">Pass<span>LLQP</span></div>
+  <div class="nav-back" onclick="location.href='index.html'">← Home</div>
 </nav>
 <div class="wrap">
-  <div class="quiz-header">
-    <div class="quiz-top">
-      <div class="quiz-label">Chapter 1 — Investment & Savings</div>
-      <div class="score-row">
-        <div class="s-badge">✓ <strong id="scoreVal">0</strong></div>
-        <div class="s-badge"><strong id="pctVal">—</strong></div>
+
+  <!-- TAB BAR -->
+  <div class="tab-bar">
+    <div class="tab active" id="tabTut" onclick="showTab('tutorial')">📖 Tutorial</div>
+    <div class="tab" id="tabQuiz" onclick="showTab('quiz')">✏️ Quiz</div>
+  </div>
+
+  <!-- TUTORIAL -->
+  <div class="tutorial-wrap visible" id="tutorialWrap">
+    <div class="tut-header">
+      <h1>Chapter 1 — Investment & Savings</h1>
+      <p>Before jumping into the quiz, read this short lesson. It covers the key concepts you'll be tested on. This takes about 5 minutes.</p>
+    </div>
+
+    <div class="tut-section">
+      <h2><span class="tut-icon">💡</span> What is investing?</h2>
+      <p>Investing means using your savings to buy something that will grow in value over time. The goal is to earn a <strong>return</strong> — the profit made on your investment.</p>
+      <p>Returns can be <strong>positive</strong> (a profit), <strong>neutral</strong> (you get back what you put in), or <strong>negative</strong> (you lose money). The return is usually expressed as a percentage — e.g. a 10% return on $1,000 means you earned $100.</p>
+      <div class="tut-callout"><strong>Key principle:</strong> Higher potential returns always come with higher risk. Lower-risk investments (like GICs) earn less. Higher-risk investments (like equities) can earn more — or lose more.</div>
+    </div>
+
+    <div class="tut-section">
+      <h2><span class="tut-icon">📈</span> Compound interest — the most powerful concept in investing</h2>
+      <p>Simple interest pays you on your original deposit only. Compound interest pays you on your deposit <em>plus</em> all the interest you've already earned. Over time, this creates dramatically faster growth.</p>
+      <div class="tut-callout">
+        <strong>Example:</strong> $1,000 at 6% compound interest annually.<br>
+        Year 1: $1,000 × 1.06 = <strong>$1,060</strong><br>
+        Year 2: $1,060 × 1.06 = <strong>$1,123.60</strong><br>
+        Year 3: $1,123.60 × 1.06 = <strong>$1,191.02</strong><br>
+        With simple interest it would only be $1,180. The extra $11.02 is compounding — and it grows every year.
       </div>
     </div>
-    <div class="prog-bar"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+
+    <div class="tut-section">
+      <h2><span class="tut-icon">🗂️</span> The main asset classes</h2>
+      <p>Investments are grouped into categories called asset classes. Each has different risk and return characteristics.</p>
+      <table class="tut-table">
+        <tr><th>Asset class</th><th>Risk level</th><th>Return type</th><th>Examples</th></tr>
+        <tr><td>Cash / Money market</td><td>Very low</td><td>Interest</td><td>Savings accounts, T-bills</td></tr>
+        <tr><td>Fixed income</td><td>Low–Medium</td><td>Interest</td><td>Bonds, GICs</td></tr>
+        <tr><td>Equities</td><td>Medium–High</td><td>Capital gains, dividends</td><td>Stocks, equity funds</td></tr>
+        <tr><td>Real estate</td><td>Medium–High</td><td>Rental income, capital gains</td><td>Rental properties</td></tr>
+      </table>
+    </div>
+
+    <div class="tut-section">
+      <h2><span class="tut-icon">🎯</span> Diversification, liquidity, and time horizon</h2>
+      <p><strong>Diversification</strong> means spreading investments across different asset classes so a loss in one doesn't wipe out everything. Don't put all your eggs in one basket.</p>
+      <p><strong>Liquidity</strong> means how quickly you can turn an investment into cash. A savings account is highly liquid. Real estate is illiquid — it can take months to sell.</p>
+      <p><strong>Time horizon</strong> is how long until you need the money. Longer horizons allow more risk because you have time to recover from losses. Short horizons require safer investments.</p>
+    </div>
+
+    <div class="tut-section">
+      <h2><span class="tut-icon">⚠️</span> Key investment risks you must know</h2>
+      <table class="tut-table">
+        <tr><th>Risk type</th><th>What it means</th><th>Who's most affected</th></tr>
+        <tr><td>Inflation risk</td><td>Your returns don't keep up with rising prices — purchasing power falls</td><td>Anyone in low-return investments</td></tr>
+        <tr><td>Interest rate risk</td><td>Locked-in rates look bad when rates rise. Bond prices fall when rates rise.</td><td>Bond holders, GIC investors, annuity holders</td></tr>
+        <tr><td>Market risk</td><td>Whole market declines due to recession, pandemic, war</td><td>All equity investors</td></tr>
+        <tr><td>Liquidity risk</td><td>Can't sell quickly without losing value</td><td>Real estate, annuity investors</td></tr>
+        <tr><td>Credit risk</td><td>Borrower fails to repay</td><td>Bond investors</td></tr>
+      </table>
+    </div>
+
+    <div class="tut-section">
+      <h2><span class="tut-icon">🏦</span> Types of investments at a glance</h2>
+      <p><strong>GICs</strong> — Guaranteed Investment Certificates. Guaranteed principal + interest. Low risk, low return. Subject to early withdrawal penalties.</p>
+      <p><strong>Bonds</strong> — Loans to governments or corporations. Pay fixed interest (coupon). When interest rates rise, bond prices fall (and vice versa).</p>
+      <p><strong>Stocks</strong> — Ownership in a company. No guarantee. Returns via capital gains and dividends. Highest risk, highest potential return.</p>
+      <p><strong>Mutual funds / ETFs</strong> — Pooled investments. Instant diversification. Mutual funds priced once daily; ETFs trade like stocks all day. ETFs have lower MERs.</p>
+      <p><strong>Segregated funds</strong> — Insurance contracts with maturity + death benefit guarantees. Higher MERs than mutual funds but offer downside protection.</p>
+      <div class="tut-callout"><strong>Remember:</strong> Only life insurance licensed advisors (LLQP) can sell segregated funds and annuities. Cryptocurrency is NOT a licensed product under LLQP.</div>
+    </div>
+
+    <div class="tut-section">
+      <h2><span class="tut-icon">💰</span> Tax treatment of investment returns</h2>
+      <table class="tut-table">
+        <tr><th>Income type</th><th>Tax treatment</th><th>Examples</th></tr>
+        <tr><td>Interest income</td><td>Fully taxable at marginal rate — least tax-efficient</td><td>GICs, savings accounts, bonds</td></tr>
+        <tr><td>Canadian dividends</td><td>Lower rate due to dividend tax credit</td><td>Canadian stocks, dividend funds</td></tr>
+        <tr><td>Capital gains</td><td>Only 50% included in income — most tax-efficient</td><td>Stocks sold at profit, real estate</td></tr>
+      </table>
+      <div class="tut-callout"><strong>RRSP:</strong> Contributions are tax-deductible. Growth is tax-deferred. Withdrawals fully taxable as income.<br><strong>TFSA:</strong> Contributions are NOT deductible. But all growth and withdrawals are completely tax-free.</div>
+    </div>
+
+    <button class="start-quiz-btn" onclick="showTab('quiz')">I'm ready — start the quiz →</button>
   </div>
 
-  <div class="q-card" id="qCard">
-    <div class="q-top">
-      <span class="q-num" id="qNum">QUESTION 1 OF 30</span>
-      <span class="diff-pill beginner" id="diffPill">Beginner</span>
+  <!-- QUIZ -->
+  <div class="quiz-wrap" id="quizWrap">
+    <div class="quiz-header">
+      <div class="quiz-top">
+        <div class="quiz-label">Chapter 1 — Investment & Savings</div>
+        <div class="score-row">
+          <div class="s-badge">✓ <strong id="scoreVal">0</strong></div>
+          <div class="s-badge"><strong id="pctVal">—</strong></div>
+        </div>
+      </div>
+      <div class="prog-bar"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
     </div>
-    <div class="q-text" id="qText"></div>
-    <div class="options" id="opts"></div>
-    <div class="exp" id="exp">
-      <div class="exp-lbl">WHY THIS IS CORRECT</div>
-      <p id="expText"></p>
+
+    <div class="q-card" id="qCard">
+      <div class="q-top">
+        <span class="q-num" id="qNum">QUESTION 1 OF 30</span>
+        <span class="diff-pill beginner" id="diffPill">Beginner</span>
+      </div>
+      <div class="q-text" id="qText"></div>
+      <div class="options" id="opts"></div>
+      <div class="exp" id="exp">
+        <div class="exp-lbl">WHY THIS IS CORRECT</div>
+        <p id="expText"></p>
+      </div>
+    </div>
+
+    <div class="footer" id="footerBar">
+      <div class="footer-left">
+        <button class="prev-btn" id="prevBtn" onclick="prevQuestion()" disabled>← Prev</button>
+      </div>
+      <button class="next-btn" id="nextBtn" disabled onclick="nextQuestion()">Next →</button>
+    </div>
+
+    <div class="results" id="results">
+      <div class="res-pct" id="resPct">0%</div>
+      <div class="res-sub" id="resSub">Chapter 1 complete</div>
+      <div class="res-grid">
+        <div class="res-stat"><div class="rv" id="rC">0</div><div class="rl">correct</div></div>
+        <div class="res-stat"><div class="rv" id="rW">0</div><div class="rl">incorrect</div></div>
+        <div class="res-stat"><div class="rv">30</div><div class="rl">questions</div></div>
+      </div>
+      <div class="unlock-banner">
+        <h3>Ready for Chapters 2–8?</h3>
+        <p>Unlock all 210 remaining questions + full mock exam for a one-time payment.</p>
+        <button class="unlock-btn" onclick="alert('Payment coming soon!')">Unlock full access — $29 →</button>
+      </div>
+      <button class="retry-btn" onclick="restart()">Retry Chapter 1</button>
+      <button class="tut-btn" onclick="showTab('tutorial')">Review tutorial</button>
     </div>
   </div>
 
-  <div class="footer" id="footerBar">
-    <div style="display:flex;align-items:center;">
-      <div class="diff-dots" id="diffDots"></div>
-      <span class="diff-label" id="diffLabel">Beginner</span>
-    </div>
-    <button class="next-btn" id="nextBtn" disabled onclick="next()">Next →</button>
-  </div>
-
-  <div class="results" id="results">
-    <div class="res-pct" id="resPct">0%</div>
-    <div class="res-sub" id="resSub">Chapter 1 complete</div>
-    <div class="res-grid">
-      <div class="res-stat"><div class="rv" id="rC">0</div><div class="rl">correct</div></div>
-      <div class="res-stat"><div class="rv" id="rW">0</div><div class="rl">incorrect</div></div>
-      <div class="res-stat"><div class="rv">30</div><div class="rl">questions</div></div>
-    </div>
-    <div class="unlock-banner">
-      <h3>Ready for Chapters 2–8?</h3>
-      <p>Unlock all 210 remaining questions + full mock exam for a one-time payment.</p>
-      <button class="unlock-btn" onclick="alert('Payment coming soon!')">Unlock full access — $29 →</button>
-    </div>
-    <button class="retry-btn" onclick="restart()">Retry Chapter 1</button>
-  </div>
 </div>
-
 <script>
+// Check for admin/unlock mode
+const isAdmin = window.location.search.includes('admin=true') || localStorage.getItem('passllqp_admin') === 'true';
+if (isAdmin) { localStorage.setItem('passllqp_admin', 'true'); }
+
+function showTab(tab) {
+  document.getElementById('tutorialWrap').classList.toggle('visible', tab === 'tutorial');
+  document.getElementById('quizWrap').classList.toggle('visible', tab === 'quiz');
+  document.getElementById('tabTut').classList.toggle('active', tab === 'tutorial');
+  document.getElementById('tabQuiz').classList.toggle('active', tab === 'quiz');
+  if (tab === 'quiz' && current === 0 && answered === 0) render();
+}
+
 const questions=[
-  {d:'beginner',q:'What is the main purpose of investing money rather than just saving it in cash?',opts:['To avoid paying taxes on your income','To grow your money over time so it outpaces inflation','To keep your money safe from any possible loss','To make your money available instantly at all times'],a:1,exp:'Saving cash keeps your money safe, but inflation slowly erodes its purchasing power. Investing aims to grow your money at a rate that outpaces inflation — so $1,000 today can buy more in the future, not less.'},
+  {d:'beginner',q:'What is the main purpose of investing money rather than just saving it in cash?',opts:['To avoid paying taxes on your income','To grow your money over time so it outpaces inflation','To keep your money safe from any possible loss','To make your money available instantly at all times'],a:1,exp:'Saving cash keeps your money safe, but inflation slowly erodes its purchasing power. Investing aims to grow your money at a rate that outpaces inflation — so $1,000 today can buy more in the future, not less. The trade-off is that investing involves some risk.'},
   {d:'beginner',q:'Maria invests $500 at 6% compound interest annually. At the end of year 1 she has $530. How much will she have at the end of year 2?',opts:['$560 — another $30 added like year 1','$561.80 — 6% applied to $530','$536 — only 6% of the original $500 added again','$600 — doubling the year 1 gain'],a:1,exp:'Compounding means interest is calculated on the new balance, not just the original. Year 2: $530 × 1.06 = $561.80. That extra $1.80 compared to simple interest is the compounding effect — small now, huge over decades.'},
   {d:'beginner',q:'Which of the following is considered an equity investment?',opts:['A government bond','A GIC from a bank','Shares of stock in a company','A savings account'],a:2,exp:'Equity means ownership. When you buy stock (shares), you become a part-owner of a company. Bonds and GICs are debt instruments — you\'re lending money, not owning anything. Savings accounts are just deposits.'},
-  {d:'beginner',q:'Why do financial advisors recommend diversifying a portfolio across different asset types?',opts:['To guarantee a specific return each year','To reduce the impact of any single investment performing poorly','To eliminate all investment risk entirely','To qualify for government insurance on all holdings'],a:1,exp:'Diversification spreads your risk. If you put all your money in one stock and that company fails, you lose everything. By spreading across stocks, bonds, real estate, etc., a loss in one area is offset by gains in others.'},
+  {d:'beginner',q:'Why do financial advisors recommend diversifying a portfolio across different asset types?',opts:['To guarantee a specific return each year','To reduce the impact of any single investment performing poorly','To eliminate all investment risk entirely','To qualify for government insurance on all holdings'],a:1,exp:'Diversification spreads your risk. If you put all your money in one stock and that company fails, you lose everything. By spreading across stocks, bonds, real estate, etc., a loss in one area is offset by gains in others. It doesn\'t eliminate risk — it manages it.'},
   {d:'beginner',q:'A client needs access to their money within 30 days for an emergency. Which option is most suitable?',opts:['Real estate property','A 5-year GIC with a lock-in period','A high-interest savings account','A segregated fund with a 10-year maturity'],a:2,exp:'Liquidity means how quickly you can convert an asset to cash. A savings account can be accessed immediately. Real estate takes months to sell. A locked GIC charges penalties. Segregated funds are designed for long-term investing.'},
   {d:'beginner',q:'What does "time value of money" mean in simple terms?',opts:['Money in the future is worth more than money today','Money today is worth more than the same amount in the future','The value of money never changes over time','Older investors have more valuable portfolios'],a:1,exp:'A dollar today is worth more than a dollar tomorrow because you can invest it and earn returns. This concept is the foundation of all investment and loan calculations.'},
   {d:'beginner',q:'What does GIC stand for and what is its primary feature?',opts:['General Investment Contract — earns variable returns based on markets','Guaranteed Income Certificate — provides lifetime income','Guaranteed Investment Certificate — offers a guaranteed rate of return','Group Investment Contract — held by employers for employees'],a:2,exp:'A GIC (Guaranteed Investment Certificate) deposits money for a fixed term at a guaranteed interest rate. You know exactly what you\'ll get back. The trade-off is limited flexibility — withdrawing early may result in penalties.'},
-  {d:'beginner',q:'What is the main advantage of a TFSA compared to a regular savings account?',opts:['TFSA contributions are tax-deductible','Any growth and withdrawals inside a TFSA are tax-free','TFSA funds are insured for unlimited amounts','TFSA accounts have no contribution limits'],a:1,exp:'Inside a TFSA, your investments grow tax-free and withdrawals are never taxed. With a regular account, investment gains are taxed each year. TFSA contributions are NOT tax-deductible — that\'s the RRSP\'s feature.'},
-  {d:'beginner',q:'What is inflation risk in the context of investing?',opts:['The risk that an investment company goes bankrupt','The risk that your investment loses value when markets crash','The risk that your returns don\'t keep up with rising prices, reducing purchasing power','The risk of lending money to a borrower who can\'t repay'],a:2,exp:'Inflation risk means even if your investment earns a positive return, inflation could make your money buy less than before. This is why low-return "safe" investments like savings accounts carry their own risk.'},
-  {d:'beginner',q:'Which factor is LEAST relevant when determining a client\'s investment objective?',opts:['The client\'s time horizon','The colour of the client\'s car','The client\'s risk tolerance','The client\'s need for income'],a:1,exp:'Investment objectives are shaped by time horizon, risk tolerance, and income needs. Personal items like a car have no bearing on investment planning.'},
+  {d:'beginner',q:'What is the main advantage of a TFSA compared to a regular savings account?',opts:['TFSA contributions are tax-deductible','Any growth and withdrawals inside a TFSA are tax-free','TFSA funds are insured for unlimited amounts','TFSA accounts have no contribution limits'],a:1,exp:'Inside a TFSA, your investments grow tax-free and withdrawals are never taxed. Note: TFSA contributions are NOT tax-deductible — that\'s the RRSP\'s feature.'},
+  {d:'beginner',q:'What is inflation risk in the context of investing?',opts:['The risk that an investment company goes bankrupt','The risk that your investment loses value when markets crash','The risk that your returns don\'t keep up with rising prices, reducing purchasing power','The risk of lending money to a borrower who can\'t repay'],a:2,exp:'Inflation risk means even if your investment earns a positive return, inflation could make your money buy less than before. This is why low-return "safe" investments carry their own risk.'},
+  {d:'beginner',q:'Which factor is LEAST relevant when determining a client\'s investment objective?',opts:['The client\'s time horizon','The colour of the client\'s car','The client\'s risk tolerance','The client\'s need for income'],a:1,exp:'Investment objectives are shaped by time horizon, risk tolerance, and income needs. Personal items like a car have no bearing on investment planning whatsoever.'},
   {d:'intermediate',q:'An investor puts $10,000 into a fund earning 7% compounded annually for 10 years. Approximately how much will it be worth?',opts:['$17,000','$19,672','$14,000','$21,500'],a:1,exp:'$10,000 × (1.07)^10 ≈ $19,672. The power of compounding — nearly doubling money without adding a single extra dollar. Starting early matters far more than starting with more money.'},
   {d:'intermediate',q:'How does a segregated fund differ from a mutual fund?',opts:['Segregated funds are purchased through banks; mutual funds through insurance companies','Segregated funds are insurance contracts with maturity and death benefit guarantees; mutual funds have no such guarantees','Segregated funds have lower management fees than mutual funds','Segregated funds can only hold Canadian investments'],a:1,exp:'Both invest in a pool of assets, but a segregated fund is an insurance contract. This gives it unique features: maturity guarantees and death benefit guarantees. These guarantees come at a cost — usually higher MERs.'},
   {d:'intermediate',q:'A client is 68 years old and wants guaranteed income they cannot outlive. Which product is most appropriate?',opts:['A 5-year GIC','An equity mutual fund','A life annuity','A high-interest savings account'],a:2,exp:'A life annuity converts a lump sum into guaranteed income payments for the rest of the annuitant\'s life. This directly addresses longevity risk. A GIC has a fixed term. A mutual fund has no income guarantee.'},
-  {d:'intermediate',q:'A client contributes $6,000 to their RRSP. They are in a 33% marginal tax bracket. Approximately how much will they save in taxes?',opts:['$600','$1,980','$6,000','$3,000'],a:1,exp:'RRSP contributions are tax-deductible. Tax savings = contribution × marginal tax rate = $6,000 × 33% = $1,980. This means the $6,000 contribution effectively only costs the client $4,020 out of pocket after the refund.'},
+  {d:'intermediate',q:'A client contributes $6,000 to their RRSP. They are in a 33% marginal tax bracket. Approximately how much will they save in taxes?',opts:['$600','$1,980','$6,000','$3,000'],a:1,exp:'RRSP contributions are tax-deductible. Tax savings = contribution × marginal tax rate = $6,000 × 33% = $1,980. This means the $6,000 contribution only costs the client $4,020 out of pocket after the refund.'},
   {d:'intermediate',q:'Interest rate risk affects bond prices in which of the following ways?',opts:['When interest rates rise, bond prices rise','When interest rates fall, bond prices fall','When interest rates rise, bond prices fall','Interest rates have no effect on bond prices'],a:2,exp:'Bonds pay a fixed interest rate. When new bonds are issued at higher rates, existing bonds become less attractive — so their market price drops. This inverse relationship is a fundamental concept for the exam.'},
   {d:'intermediate',q:'A 35-year-old client has stable income, no debt, and won\'t need invested funds for 25 years. What risk profile best fits?',opts:['Conservative — they should protect capital at all costs','Balanced — equal weighting of growth and safety','Growth or aggressive — they can weather market volatility over a long horizon','Income — they need regular cash flow'],a:2,exp:'A 25-year time horizon gives ample time to ride out market downturns. A young investor with stable income and no immediate need for funds is generally best suited for a growth or aggressive profile.'},
   {d:'intermediate',q:'What is a Management Expense Ratio (MER) and why does it matter?',opts:['It\'s a one-time fee paid when purchasing a fund','It\'s the annual cost of running a fund, expressed as a percentage of assets — it directly reduces investor returns','It\'s the percentage of the fund held in management shares','It\'s a government tax applied to all investment funds'],a:1,exp:'The MER is the total annual cost of managing the fund. If a fund earns 8% but has a 2.5% MER, your net return is 5.5%. Over 20-30 years, even a 1% difference in MER can cost tens of thousands of dollars.'},
   {d:'intermediate',q:'What is a key structural difference between an ETF and a mutual fund?',opts:['ETFs are only available for registered accounts like RRSPs','ETFs trade on stock exchanges throughout the day; mutual funds are priced once daily at close','ETFs are guaranteed by the government; mutual funds are not','ETFs have higher MERs than mutual funds on average'],a:1,exp:'ETFs trade on exchanges like stocks — any time during market hours. Mutual funds are only priced once per day after the market closes. ETFs also typically have lower MERs than actively managed mutual funds.'},
   {d:'intermediate',q:'Which investment carries the HIGHEST liquidity risk?',opts:['A money market fund','A publicly traded stock','Direct ownership of rental property','A government bond'],a:2,exp:'Liquidity risk is the difficulty of converting an asset to cash quickly. Real estate is highly illiquid — selling a property can take months and involves significant transaction costs. Money market funds and government bonds are highly liquid.'},
-  {d:'intermediate',q:'If you want to have $50,000 in 10 years and can earn 5% annually, approximately how much do you need to invest today?',opts:['$50,000','$30,696','$45,000','$25,000'],a:1,exp:'Present value = $50,000 ÷ (1.05)^10 = $50,000 ÷ 1.6289 ≈ $30,696. This tells you that $30,696 invested today at 5% annual growth will become $50,000 in 10 years.'},
-  {d:'advanced',q:'A client deposits $80,000 into a segregated fund with a 75% maturity guarantee. The fund declines to $45,000 at maturity. How much does the client receive?',opts:['$45,000 — the actual market value','$60,000 — 75% of the original deposit','$80,000 — full return of capital','$67,500 — 75% of the peak value'],a:1,exp:'75% maturity guarantee = 75% × $80,000 = $60,000. Since market value ($45,000) is less than the guarantee ($60,000), the insurance company makes up the difference. This is the core protection that distinguishes seg funds from mutual funds.'},
+  {d:'intermediate',q:'If you want to have $50,000 in 10 years and can earn 5% annually, approximately how much do you need to invest today?',opts:['$50,000','$30,696','$45,000','$25,000'],a:1,exp:'Present value = $50,000 ÷ (1.05)^10 ≈ $30,696. This tells you that $30,696 invested today at 5% annual growth will become $50,000 in 10 years. Present value calculations help clients understand how much to save today to reach a future goal.'},
+  {d:'advanced',q:'A client deposits $80,000 into a segregated fund with a 75% maturity guarantee. The fund declines to $45,000 at maturity. How much does the client receive?',opts:['$45,000 — the actual market value','$60,000 — 75% of the original deposit','$80,000 — full return of capital','$67,500 — 75% of the peak value'],a:1,exp:'75% of $80,000 = $60,000. Since market value ($45,000) is less than the guarantee ($60,000), the insurance company makes up the difference. This is the core protection that distinguishes seg funds from mutual funds.'},
   {d:'advanced',q:'A self-employed business owner is concerned about creditor claims. Which product can offer potential protection?',opts:['A non-registered mutual fund','A personal bank account','A segregated fund with an irrevocable beneficiary designation','An ETF held in a brokerage account'],a:2,exp:'Segregated funds are insurance contracts. When a beneficiary (other than the estate) is named — particularly an irrevocable beneficiary — the funds may be protected from creditor claims. Mutual funds, bank accounts, and ETFs offer no such protection.'},
-  {d:'advanced',q:'A client aged 59 plans to retire at 65. They have unused RRSP room and are currently in the 43% tax bracket. They expect to be in the 28% bracket in retirement. What is the primary tax advantage of maximizing RRSP contributions now?',opts:['They avoid capital gains tax on investments inside the RRSP','They deduct contributions at a 43% rate today and pay tax on withdrawals at 28% in retirement — a 15% tax rate arbitrage','RRSP withdrawals are completely tax-free in retirement','Contributions can be made indefinitely with no age limit'],a:1,exp:'Contributing $10,000 saves $4,300 in taxes today (43%). In retirement, that same $10,000 withdrawal is taxed at 28% — only $2,800. The client "earns" a permanent $1,500 benefit per $10,000. Plus the money grew tax-sheltered in between.'},
-  {d:'advanced',q:'Which feature of segregated funds can help bypass the probate process upon the death of the contract holder?',opts:['The reset provision','The named beneficiary designation','The maturity guarantee','The creditor protection clause'],a:1,exp:'When a beneficiary is named on a seg fund contract, the death benefit passes directly to that beneficiary outside of the estate — avoiding probate entirely, no delays, no probate fees, and no public disclosure.'},
+  {d:'advanced',q:'A client aged 59 plans to retire at 65 in the 43% tax bracket and expects to be in the 28% bracket in retirement. What is the primary benefit of maximizing RRSP contributions now?',opts:['They avoid capital gains tax on investments inside the RRSP','They deduct contributions at a 43% rate today and pay tax on withdrawals at 28% in retirement — a 15% tax rate arbitrage','RRSP withdrawals are completely tax-free in retirement','Contributions can be made indefinitely with no age limit'],a:1,exp:'Contributing $10,000 saves $4,300 in taxes today (43%). In retirement, that same $10,000 withdrawal is taxed at 28% — only $2,800. The client "earns" a permanent $1,500 benefit per $10,000, plus the money grew tax-sheltered in between.'},
+  {d:'advanced',q:'Which feature of segregated funds can help bypass the probate process upon the death of the contract holder?',opts:['The reset provision','The named beneficiary designation','The maturity guarantee','The creditor protection clause'],a:1,exp:'When a beneficiary is named on a seg fund contract, the death benefit passes directly to that beneficiary outside of the estate — avoiding probate entirely. No delays, no probate fees, no public disclosure.'},
   {d:'advanced',q:'A client holds a non-registered prescribed annuity. How is the income taxed?',opts:['All payments are fully taxable as ordinary income','Payments are fully tax-free since they return the client\'s own capital','Each payment is partly a return of capital and partly interest — only the interest portion is taxed, blended evenly over the annuity\'s life','Capital gains tax applies to all annuity growth'],a:2,exp:'A prescribed annuity blends the return of original capital (non-taxable) and interest (taxable) evenly across all payments. For retirees in a lower bracket seeking steady income, a prescribed annuity is often tax-optimal.'},
-  {d:'advanced',q:'An 82-year-old client with declining cognitive capacity asks to move all funds into a high-risk equity seg fund with a 10-year maturity. What is the advisor\'s primary obligation?',opts:['Execute the trade immediately — client instructions must be followed','Assess suitability based on the client\'s age, time horizon, cognitive state, and needs — and document concerns if the trade is unsuitable','Refuse the trade outright and transfer the account','Require a family member to co-sign before proceeding'],a:1,exp:'KYC and suitability obligations require an advisor to ensure every recommendation fits the client\'s actual situation. A 10-year maturity on an aggressive equity fund for an 82-year-old is almost certainly unsuitable. The advisor must document concerns and discuss alternatives.'},
+  {d:'advanced',q:'An 82-year-old client with declining cognitive capacity asks to move all funds into a high-risk equity seg fund with a 10-year maturity. What is the advisor\'s primary obligation?',opts:['Execute the trade immediately — client instructions must be followed','Assess suitability based on age, time horizon, cognitive state, and needs — document concerns if the trade is unsuitable','Refuse the trade outright and transfer the account','Require a family member to co-sign before proceeding'],a:1,exp:'KYC and suitability obligations require an advisor to ensure every recommendation fits the client\'s actual situation. A 10-year maturity on an aggressive equity fund for an 82-year-old is almost certainly unsuitable. The advisor must document concerns and discuss alternatives.'},
   {d:'advanced',q:'A Canadian investor holds US equity funds. The US market rises 10%, but the Canadian dollar strengthens 6% against the US dollar. What is the investor\'s approximate net return in Canadian dollars?',opts:['16%','10%','4%','−6%'],a:2,exp:'Foreign exchange risk cuts both ways. The fund gained 10% in USD, but converting back to CAD at a stronger loonie reduces the gain. Net return ≈ 10% − 6% = 4% in CAD terms.'},
   {d:'advanced',q:'A client surrenders a segregated fund contract early. Which costs might they face?',opts:['Only the standard MER — no additional charges','A deferred sales charge (DSC) on units purchased under that option, plus potential loss of the maturity guarantee','A government early withdrawal tax of 15%','Loss of all accumulated gains but no penalty on principal'],a:1,exp:'Early surrender can trigger: a DSC (deferred sales charge) that declines over time but can be significant in early years, AND the loss of the maturity guarantee — the very protection the client was paying for.'},
-  {d:'advanced',q:'A portfolio contains Canadian equities, Canadian bonds, and Canadian real estate. Is this portfolio truly diversified?',opts:['Yes — it contains three different asset classes','No — all assets are in the same country, creating concentrated geographic and economic risk','Yes — equities and bonds move in opposite directions, providing full protection','No — true diversification requires at least 10 different asset classes'],a:1,exp:'Asset class diversification is only one dimension. This portfolio has geographic concentration — all assets are exposed to Canadian economic conditions. A truly diversified portfolio would also include international equities and global bonds.'},
-  {d:'advanced',q:'A fund reports an average annual return of 12% over 3 years: +30%, −10%, +16%. A client assumes $10,000 is now worth $13,600. Are they correct?',opts:['Yes — 12% × 3 years × $10,000 = $13,600','No — the actual value is higher because compounding adds more','No — the actual value is lower because losses compound too, reducing the geometric return below the arithmetic average','Yes — percentage averages work exactly like simple interest calculations'],a:2,exp:'The arithmetic average (12%) overstates actual returns. The geometric return: $10,000 × 1.30 × 0.90 × 1.16 ≈ $13,572. But if Year 1 were −30%: $10,000 × 0.70 × 1.10 × 1.16 = $8,932. Losses hurt more than gains of the same size help.'}
+  {d:'advanced',q:'A portfolio contains Canadian equities, Canadian bonds, and Canadian real estate. Is this portfolio truly diversified?',opts:['Yes — it contains three different asset classes','No — all assets are in the same country, creating concentrated geographic and economic risk','Yes — equities and bonds move in opposite directions, providing full protection','No — true diversification requires at least 10 different asset classes'],a:1,exp:'Asset class diversification is only one dimension. This portfolio has geographic concentration — all assets are exposed to Canadian economic conditions. A truly diversified portfolio also includes international exposure.'},
+  {d:'advanced',q:'A fund reports average annual returns of +30%, −10%, +16% over 3 years. A client assumes $10,000 is now worth $13,600. Are they correct?',opts:['Yes — 12% × 3 years × $10,000 = $13,600','No — the actual value is higher because compounding adds more','No — the actual value is lower because losses compound too, reducing the geometric return below the arithmetic average','Yes — percentage averages work exactly like simple interest calculations'],a:2,exp:'The arithmetic average (12%) overstates actual returns. The geometric return: $10,000 × 1.30 × 0.90 × 1.16 ≈ $13,572. Losses hurt more than gains of the same size help. This asymmetry is critical for understanding real investment performance.'}
 ];
 
 let current=0, score=0, answered=0;
+let answeredState = new Array(questions.length).fill(null); // null=unanswered, true=correct, false=wrong
+let selectedState = new Array(questions.length).fill(null); // which option was selected
 const shuffled=[...questions].sort(()=>Math.random()-0.5);
 
 function render(){
   const q=shuffled[current], total=shuffled.length;
   document.getElementById('qNum').textContent=`QUESTION ${current+1} OF ${total}`;
-  document.getElementById('progFill').style.width=`${(current/total)*100}%`;
+  document.getElementById('progFill').style.width=`${((current)/total)*100}%`;
   const pill=document.getElementById('diffPill');
   pill.textContent=q.d.charAt(0).toUpperCase()+q.d.slice(1);
   pill.className='diff-pill '+q.d;
   document.getElementById('qText').textContent=q.q;
-  document.getElementById('exp').classList.remove('visible');
+
+  const exp=document.getElementById('exp');
   document.getElementById('expText').textContent=q.exp;
-  const dots=document.getElementById('diffDots');
-  const f=q.d==='beginner'?1:q.d==='intermediate'?2:3;
-  dots.innerHTML=[1,2,3].map(i=>`<div class="dot${i<=f?' on':''}"></div>`).join('');
-  document.getElementById('diffLabel').textContent=q.d.charAt(0).toUpperCase()+q.d.slice(1);
+  if(answeredState[current]!==null){exp.classList.add('visible');}else{exp.classList.remove('visible');}
+
   const c=document.getElementById('opts'); c.innerHTML='';
   q.opts.forEach((opt,i)=>{
     const div=document.createElement('div'); div.className='option';
+    if(answeredState[current]!==null){
+      div.classList.add('disabled');
+      if(i===q.a) div.classList.add('correct');
+      if(i===selectedState[current] && selectedState[current]!==q.a) div.classList.add('wrong');
+    }
     div.innerHTML=`<span class="opt-l">${String.fromCharCode(65+i)}</span><span>${opt}</span>`;
-    div.onclick=()=>sel(div,i===q.a,i,q.a);
+    if(answeredState[current]===null){ div.onclick=()=>sel(div,i===q.a,i,q.a); }
     c.appendChild(div);
   });
-  document.getElementById('nextBtn').disabled=true;
-  document.getElementById('nextBtn').textContent=current===shuffled.length-1?'Finish →':'Next →';
+
+  const nextBtn=document.getElementById('nextBtn');
+  nextBtn.disabled = (answeredState[current]===null);
+  nextBtn.textContent = current===shuffled.length-1 ? 'Finish →' : 'Next →';
+  document.getElementById('prevBtn').disabled = (current===0);
+
+  // Recalculate score display
+  let s=0, a=0;
+  answeredState.forEach(v=>{if(v!==null){a++;if(v)s++;}});
+  document.getElementById('scoreVal').textContent=s;
+  document.getElementById('pctVal').textContent=a>0?Math.round((s/a)*100)+'%':'—';
 }
 
 function sel(el,ok,chosen,correct){
-  document.querySelectorAll('.option').forEach((o,i)=>{o.onclick=null;o.classList.add('disabled');if(i===correct)o.classList.add('correct');});
-  if(!ok)el.classList.add('wrong');
+  document.querySelectorAll('.option').forEach((o,i)=>{
+    o.onclick=null; o.classList.add('disabled');
+    if(i===correct) o.classList.add('correct');
+  });
+  if(!ok) el.classList.add('wrong');
   document.getElementById('exp').classList.add('visible');
   document.getElementById('nextBtn').disabled=false;
-  answered++; if(ok)score++;
-  document.getElementById('scoreVal').textContent=score;
-  document.getElementById('pctVal').textContent=Math.round((score/answered)*100)+'%';
+  answeredState[current]=ok;
+  selectedState[current]=chosen;
+  let s=0, a=0;
+  answeredState.forEach(v=>{if(v!==null){a++;if(v)s++;}});
+  score=s; answered=a;
+  document.getElementById('scoreVal').textContent=s;
+  document.getElementById('pctVal').textContent=Math.round((s/a)*100)+'%';
 }
 
-function next(){
+function nextQuestion(){
   current++;
   if(current>=shuffled.length){showResults();return;}
   render();
 }
 
+function prevQuestion(){
+  if(current>0){current--;render();}
+}
+
 function showResults(){
   document.getElementById('qCard').style.display='none';
   document.getElementById('footerBar').style.display='none';
-  const pct=Math.round((score/shuffled.length)*100);
+  const s=answeredState.filter(v=>v===true).length;
+  const pct=Math.round((s/shuffled.length)*100);
   document.getElementById('resPct').textContent=pct+'%';
   document.getElementById('resSub').textContent=pct>=60?'You passed Chapter 1! Ready for the rest?':'Keep practising — you\'re getting there.';
-  document.getElementById('rC').textContent=score;
-  document.getElementById('rW').textContent=shuffled.length-score;
+  document.getElementById('rC').textContent=s;
+  document.getElementById('rW').textContent=shuffled.length-s;
   document.getElementById('results').classList.add('visible');
 }
 
 function restart(){
   current=0; score=0; answered=0;
+  answeredState=new Array(questions.length).fill(null);
+  selectedState=new Array(questions.length).fill(null);
   document.getElementById('qCard').style.display='block';
   document.getElementById('footerBar').style.display='flex';
   document.getElementById('results').classList.remove('visible');
