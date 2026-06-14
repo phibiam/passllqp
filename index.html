@@ -8,103 +8,90 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sora:wght@600;700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --blue: #185FA5;
-      --blue-light: #E6F1FB;
-      --green: #0F6E56;
-      --text: #0F1117;
-      --muted: #6B7280;
-      --border: #E5E7EB;
-      --bg: #F9FAFB;
-      --white: #FFFFFF;
-      --radius: 12px;
-    }
-    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
-    a { color: inherit; text-decoration: none; }
+    :root { --blue:#185FA5; --blue-light:#E6F1FB; --green:#0F6E56; --text:#0F1117; --muted:#6B7280; --border:#E5E7EB; --bg:#F9FAFB; --white:#fff; --radius:12px; }
+    body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+    a { color:inherit; text-decoration:none; }
+    nav { background:var(--white); border-bottom:1px solid var(--border); padding:0 24px; height:60px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; }
+    .nav-logo { font-family:'Sora',sans-serif; font-size:18px; font-weight:700; }
+    .nav-logo span { color:var(--blue); }
+    .nav-actions { display:flex; gap:10px; align-items:center; }
+    .btn-outline { border:1.5px solid var(--border); background:none; padding:7px 16px; border-radius:8px; font-size:13px; font-weight:500; cursor:pointer; font-family:'Inter',sans-serif; color:var(--text); }
+    .btn-primary { background:var(--blue); color:#fff; border:none; padding:8px 18px; border-radius:8px; font-size:13px; font-weight:500; cursor:pointer; font-family:'Inter',sans-serif; }
+    .btn-primary:hover { background:#1450A0; }
+    .hero { max-width:720px; margin:0 auto; padding:70px 24px 52px; text-align:center; }
+    .hero-badge { display:inline-block; background:var(--blue-light); color:var(--blue); font-size:12px; font-weight:600; padding:4px 12px; border-radius:20px; margin-bottom:18px; }
+    .hero h1 { font-family:'Sora',sans-serif; font-size:clamp(30px,5vw,46px); font-weight:700; line-height:1.2; margin-bottom:16px; }
+    .hero h1 em { font-style:normal; color:var(--blue); }
+    .hero p { font-size:16px; color:var(--muted); max-width:500px; margin:0 auto 28px; line-height:1.7; }
+    .hero-actions { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-bottom:40px; }
+    .hero-cta { background:var(--blue); color:#fff; border:none; padding:13px 26px; border-radius:10px; font-size:14px; font-weight:600; cursor:pointer; font-family:'Inter',sans-serif; }
+    .hero-secondary { background:var(--white); color:var(--text); border:1.5px solid var(--border); padding:12px 26px; border-radius:10px; font-size:14px; font-weight:500; cursor:pointer; font-family:'Inter',sans-serif; }
+    .stats { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; max-width:600px; margin:0 auto 60px; padding:0 24px; }
+    .stat { background:var(--white); border:1px solid var(--border); border-radius:var(--radius); padding:18px; text-align:center; }
+    .stat .num { font-family:'Sora',sans-serif; font-size:26px; font-weight:700; color:var(--blue); margin-bottom:3px; }
+    .stat .lbl { font-size:12px; color:var(--muted); }
+    .section { max-width:960px; margin:0 auto; padding:0 24px 60px; }
+    .section-label { font-size:12px; font-weight:600; color:var(--blue); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:10px; }
+    .section-title { font-family:'Sora',sans-serif; font-size:clamp(20px,3vw,28px); font-weight:700; color:var(--text); margin-bottom:28px; }
 
-    /* NAV */
-    nav { background: var(--white); border-bottom: 1px solid var(--border); padding: 0 24px; height: 60px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
-    .nav-logo { font-family: 'Sora', sans-serif; font-size: 18px; font-weight: 700; color: var(--text); }
-    .nav-logo span { color: var(--blue); }
-    .nav-actions { display: flex; gap: 10px; align-items: center; }
-    .btn-outline { border: 1.5px solid var(--border); background: none; padding: 7px 16px; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; font-family: 'Inter', sans-serif; color: var(--text); }
-    .btn-primary { background: var(--blue); color: #fff; border: none; padding: 8px 18px; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; font-family: 'Inter', sans-serif; }
-    .btn-primary:hover { background: #1450A0; }
+    /* MODULE TABS */
+    .module-tabs { display:flex; gap:6px; margin-bottom:20px; flex-wrap:wrap; }
+    .mod-tab { padding:8px 16px; border-radius:20px; font-size:13px; font-weight:500; cursor:pointer; border:1.5px solid var(--border); background:var(--white); color:var(--muted); transition:all 0.15s; }
+    .mod-tab.active { background:var(--blue); color:#fff; border-color:var(--blue); }
+    .mod-tab.coming { opacity:0.5; cursor:default; }
 
-    /* HERO */
-    .hero { max-width: 720px; margin: 0 auto; padding: 80px 24px 64px; text-align: center; }
-    .hero-badge { display: inline-block; background: var(--blue-light); color: var(--blue); font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 20px; margin-bottom: 20px; letter-spacing: 0.04em; }
-    .hero h1 { font-family: 'Sora', sans-serif; font-size: clamp(32px, 5vw, 48px); font-weight: 700; line-height: 1.2; color: var(--text); margin-bottom: 18px; }
-    .hero h1 em { font-style: normal; color: var(--blue); }
-    .hero p { font-size: 17px; color: var(--muted); max-width: 520px; margin: 0 auto 32px; line-height: 1.7; }
-    .hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 48px; }
-    .hero-cta { background: var(--blue); color: #fff; border: none; padding: 14px 28px; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; }
-    .hero-cta:hover { background: #1450A0; }
-    .hero-secondary { background: var(--white); color: var(--text); border: 1.5px solid var(--border); padding: 13px 28px; border-radius: 10px; font-size: 15px; font-weight: 500; cursor: pointer; font-family: 'Inter', sans-serif; }
-    .social-proof { display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 13px; color: var(--muted); }
-    .stars { color: #F59E0B; letter-spacing: 2px; }
+    /* ADMIN BANNER */
+    .admin-banner { background:linear-gradient(135deg,#0F6E56,#0A5040); color:#fff; border-radius:var(--radius); padding:16px 20px; margin-bottom:20px; display:none; align-items:center; justify-content:space-between; }
+    .admin-banner.visible { display:flex; }
+    .admin-banner p { font-size:13px; font-weight:500; }
+    .admin-badge { background:rgba(255,255,255,0.2); font-size:11px; font-weight:600; padding:3px 10px; border-radius:20px; }
 
-    /* STATS */
-    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; max-width: 640px; margin: 48px auto; padding: 0 24px; }
-    .stat { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; text-align: center; }
-    .stat .num { font-family: 'Sora', sans-serif; font-size: 28px; font-weight: 700; color: var(--blue); margin-bottom: 4px; }
-    .stat .lbl { font-size: 13px; color: var(--muted); }
+    /* CHAPTERS GRID */
+    .chapters-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; }
+    .ch-card { background:var(--white); border:1px solid var(--border); border-radius:var(--radius); padding:18px; display:flex; align-items:flex-start; gap:12px; transition:border-color 0.15s, box-shadow 0.15s; }
+    .ch-card.clickable { cursor:pointer; }
+    .ch-card.clickable:hover { border-color:var(--blue); box-shadow:0 2px 8px rgba(24,95,165,0.1); }
+    .ch-card.locked { opacity:0.5; }
+    .ch-card.featured { border-color:var(--blue); border-width:1.5px; }
+    .ch-num { background:var(--blue-light); color:var(--blue); font-size:11px; font-weight:700; padding:3px 8px; border-radius:6px; flex-shrink:0; margin-top:2px; white-space:nowrap; }
+    .ch-num.green { background:#E1F5EE; color:var(--green); }
+    .ch-info h4 { font-size:13px; font-weight:600; color:var(--text); margin-bottom:3px; }
+    .ch-info p { font-size:12px; color:var(--muted); }
+    .lock { font-size:11px; }
 
     /* FEATURES */
-    .section { max-width: 960px; margin: 0 auto; padding: 64px 24px; }
-    .section-label { font-size: 12px; font-weight: 600; color: var(--blue); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 12px; }
-    .section-title { font-family: 'Sora', sans-serif; font-size: clamp(22px, 3vw, 30px); font-weight: 700; color: var(--text); margin-bottom: 40px; }
-    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
-    .feature { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; }
-    .feature-icon { font-size: 28px; margin-bottom: 14px; }
-    .feature h3 { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
-    .feature p { font-size: 13px; color: var(--muted); line-height: 1.7; }
-
-    /* CHAPTERS */
-    .chapters-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
-    .ch-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; display: flex; align-items: flex-start; gap: 12px; }
-    .ch-num { background: var(--blue-light); color: var(--blue); font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px; flex-shrink: 0; margin-top: 2px; }
-    .ch-info h4 { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
-    .ch-info p { font-size: 12px; color: var(--muted); }
-    .ch-card.locked { opacity: 0.55; }
-    .lock { font-size: 12px; color: var(--muted); }
+    .features-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:14px; }
+    .feature { background:var(--white); border:1px solid var(--border); border-radius:var(--radius); padding:22px; }
+    .feature-icon { font-size:26px; margin-bottom:12px; }
+    .feature h3 { font-size:14px; font-weight:600; margin-bottom:7px; }
+    .feature p { font-size:13px; color:var(--muted); line-height:1.7; }
 
     /* PRICING */
-    .pricing-wrap { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; max-width: 640px; }
-    .price-card { background: var(--white); border: 1.5px solid var(--border); border-radius: var(--radius); padding: 28px; }
-    .price-card.featured { border-color: var(--blue); position: relative; }
-    .price-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--blue); color: #fff; font-size: 11px; font-weight: 600; padding: 3px 12px; border-radius: 20px; white-space: nowrap; }
-    .price-name { font-size: 13px; font-weight: 600; color: var(--muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em; }
-    .price-amount { font-family: 'Sora', sans-serif; font-size: 36px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
-    .price-amount span { font-size: 16px; font-weight: 400; color: var(--muted); }
-    .price-desc { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
-    .price-features { list-style: none; margin-bottom: 24px; }
-    .price-features li { font-size: 13px; color: var(--text); padding: 5px 0; display: flex; align-items: center; gap: 8px; }
-    .price-features li::before { content: '✓'; color: var(--green); font-weight: 700; flex-shrink: 0; }
-    .price-btn { width: 100%; padding: 12px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; border: none; }
-    .price-btn.free { background: var(--bg); color: var(--text); border: 1.5px solid var(--border); }
-    .price-btn.paid { background: var(--blue); color: #fff; }
-
-    /* CTA STRIP */
-    .cta-strip { background: var(--blue); color: #fff; text-align: center; padding: 64px 24px; }
-    .cta-strip h2 { font-family: 'Sora', sans-serif; font-size: clamp(22px, 3vw, 30px); font-weight: 700; margin-bottom: 12px; }
-    .cta-strip p { font-size: 15px; opacity: 0.85; margin-bottom: 28px; }
-    .cta-strip .hero-cta { background: #fff; color: var(--blue); }
-
-    /* FOOTER */
-    footer { background: var(--white); border-top: 1px solid var(--border); padding: 28px 24px; text-align: center; }
-    footer p { font-size: 13px; color: var(--muted); }
-    footer .logo { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 15px; color: var(--text); margin-bottom: 8px; }
-    footer .logo span { color: var(--blue); }
-
-    @media (max-width: 600px) {
-      .stats { grid-template-columns: repeat(3, 1fr); gap: 10px; }
-      .nav-actions .btn-outline { display: none; }
-    }
+    .pricing-wrap { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:18px; max-width:600px; }
+    .price-card { background:var(--white); border:1.5px solid var(--border); border-radius:var(--radius); padding:26px; }
+    .price-card.featured { border-color:var(--blue); position:relative; }
+    .price-badge { position:absolute; top:-12px; left:50%; transform:translateX(-50%); background:var(--blue); color:#fff; font-size:11px; font-weight:600; padding:3px 12px; border-radius:20px; white-space:nowrap; }
+    .price-name { font-size:12px; font-weight:600; color:var(--muted); margin-bottom:7px; text-transform:uppercase; letter-spacing:0.05em; }
+    .price-amount { font-family:'Sora',sans-serif; font-size:34px; font-weight:700; color:var(--text); margin-bottom:4px; }
+    .price-amount span { font-size:15px; font-weight:400; color:var(--muted); }
+    .price-desc { font-size:13px; color:var(--muted); margin-bottom:18px; }
+    .price-features { list-style:none; margin-bottom:22px; }
+    .price-features li { font-size:13px; color:var(--text); padding:4px 0; display:flex; align-items:center; gap:7px; }
+    .price-features li::before { content:'✓'; color:var(--green); font-weight:700; flex-shrink:0; }
+    .price-btn { width:100%; padding:11px; border-radius:8px; font-size:14px; font-weight:600; cursor:pointer; font-family:'Inter',sans-serif; border:none; }
+    .price-btn.free { background:var(--bg); color:var(--text); border:1.5px solid var(--border); }
+    .price-btn.paid { background:var(--blue); color:#fff; }
+    .cta-strip { background:var(--blue); color:#fff; text-align:center; padding:56px 24px; }
+    .cta-strip h2 { font-family:'Sora',sans-serif; font-size:clamp(20px,3vw,28px); font-weight:700; margin-bottom:10px; }
+    .cta-strip p { font-size:14px; opacity:0.85; margin-bottom:24px; }
+    .cta-strip .hero-cta { background:#fff; color:var(--blue); }
+    footer { background:var(--white); border-top:1px solid var(--border); padding:28px 24px; text-align:center; }
+    footer .logo { font-family:'Sora',sans-serif; font-weight:700; font-size:15px; margin-bottom:6px; }
+    footer .logo span { color:var(--blue); }
+    footer p { font-size:12px; color:var(--muted); }
   </style>
 </head>
 <body>
-
 <nav>
   <div class="nav-logo">Pass<span>LLQP</span></div>
   <div class="nav-actions">
@@ -113,108 +100,70 @@
   </div>
 </nav>
 
-<!-- HERO -->
 <div class="hero">
   <div class="hero-badge">Alberta LLQP Exam Prep</div>
   <h1>Study smarter.<br><em>Pass faster.</em></h1>
-  <p>Plain-language lessons, chapter quizzes, and full mock exams — built for busy people who need to pass, not just study.</p>
+  <p>Plain-language tutorials, chapter quizzes, and full mock exams — built for busy people who need to pass, not just study.</p>
   <div class="hero-actions">
     <button class="hero-cta" onclick="location.href='chapter1.html'">Start Chapter 1 — Free →</button>
     <button class="hero-secondary" onclick="location.href='mock.html'">Try mock exam</button>
   </div>
-  <div class="social-proof">
-    <span class="stars">★★★★★</span>
-    <span>Built by someone who wrote the Alberta LLQP exam</span>
-  </div>
 </div>
 
-<!-- STATS -->
 <div class="stats">
-  <div class="stat"><div class="num">240</div><div class="lbl">Practice questions</div></div>
-  <div class="stat"><div class="num">8</div><div class="lbl">Chapters covered</div></div>
+  <div class="stat"><div class="num">240+</div><div class="lbl">Practice questions</div></div>
+  <div class="stat"><div class="num">4</div><div class="lbl">LLQP modules</div></div>
   <div class="stat"><div class="num">60%</div><div class="lbl">Pass mark to beat</div></div>
 </div>
 
-<!-- FEATURES -->
 <div class="section">
-  <div class="section-label">Why PassLLQP</div>
-  <div class="section-title">Everything you need to pass.<br>Nothing you don't.</div>
-  <div class="features-grid">
-    <div class="feature">
-      <div class="feature-icon">📖</div>
-      <h3>Plain-language explanations</h3>
-      <p>Every question explains exactly why the correct answer is right — in simple English, not textbook language.</p>
-    </div>
-    <div class="feature">
-      <div class="feature-icon">📈</div>
-      <h3>Difficulty progression</h3>
-      <p>Questions build from beginner to advanced — just like the real exam. Master the basics before tackling complex scenarios.</p>
-    </div>
-    <div class="feature">
-      <div class="feature-icon">🎯</div>
-      <h3>Mock exams with timer</h3>
-      <p>Full 50-question timed mock exam that simulates the real LLQP experience, with a chapter breakdown at the end.</p>
-    </div>
-    <div class="feature">
-      <div class="feature-icon">📊</div>
-      <h3>Know your weak spots</h3>
-      <p>After every mock exam, see exactly which chapters you need to focus on — so you study smart, not long.</p>
-    </div>
-    <div class="feature">
-      <div class="feature-icon">🔄</div>
-      <h3>Shuffles every attempt</h3>
-      <p>Questions shuffle on every attempt so you never memorize order. You learn the material, not the pattern.</p>
-    </div>
-    <div class="feature">
-      <div class="feature-icon">📱</div>
-      <h3>Study anywhere</h3>
-      <p>Works on your phone, tablet, or computer — no app download required. Study on your lunch break or commute.</p>
-    </div>
+  <!-- ADMIN BANNER -->
+  <div class="admin-banner" id="adminBanner">
+    <p>🔓 Admin mode active — all chapters unlocked</p>
+    <span class="admin-badge">OWNER ACCESS</span>
   </div>
-</div>
 
-<!-- CHAPTERS -->
-<div class="section" style="padding-top: 0;">
   <div class="section-label">Content</div>
-  <div class="section-title">All 8 chapters. 30 questions each.</div>
-  <div class="chapters-grid">
-    <div class="ch-card" onclick="location.href='chapter1.html'" style="cursor:pointer; border-color: #185FA5;">
-      <div class="ch-num">Ch.1</div>
-      <div class="ch-info"><h4>Investment & Savings</h4><p>30 questions · Free</p></div>
+  <div class="section-title">All 4 LLQP modules. Every chapter.</div>
+
+  <!-- MODULE TABS -->
+  <div class="module-tabs">
+    <div class="mod-tab active" onclick="showModule('seg')">📊 Seg Funds & Annuities</div>
+    <div class="mod-tab coming" title="Coming soon">⚖️ Ethics (coming soon)</div>
+    <div class="mod-tab coming" title="Coming soon">🏥 Life Insurance (coming soon)</div>
+    <div class="mod-tab coming" title="Coming soon">🩺 Accident & Sickness (coming soon)</div>
+  </div>
+
+  <!-- SEG FUNDS MODULE -->
+  <div id="modSeg">
+    <div class="chapters-grid" id="chaptersGrid">
+      <!-- Rendered by JS -->
     </div>
-    <div class="ch-card locked">
-      <div class="ch-num">Ch.2</div>
-      <div class="ch-info"><h4>Segregated Funds</h4><p>30 questions · <span class="lock">🔒 Unlock</span></p></div>
+  </div>
+
+  <div style="margin-top:16px; padding:16px; background:var(--white); border:1px solid var(--border); border-radius:var(--radius); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+    <div>
+      <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:3px;">📋 Full mock exam</div>
+      <div style="font-size:12px;color:var(--muted);">50 questions · 90 minutes · all chapters · chapter breakdown at end</div>
     </div>
-    <div class="ch-card locked">
-      <div class="ch-num">Ch.3</div>
-      <div class="ch-info"><h4>Annuities</h4><p>30 questions · <span class="lock">🔒 Unlock</span></p></div>
-    </div>
-    <div class="ch-card locked">
-      <div class="ch-num">Ch.4</div>
-      <div class="ch-info"><h4>Investor Profile</h4><p>30 questions · <span class="lock">🔒 Unlock</span></p></div>
-    </div>
-    <div class="ch-card locked">
-      <div class="ch-num">Ch.5</div>
-      <div class="ch-info"><h4>Recommendations</h4><p>30 questions · <span class="lock">🔒 Unlock</span></p></div>
-    </div>
-    <div class="ch-card locked">
-      <div class="ch-num">Ch.6</div>
-      <div class="ch-info"><h4>Seg Fund Contracts</h4><p>30 questions · <span class="lock">🔒 Unlock</span></p></div>
-    </div>
-    <div class="ch-card locked">
-      <div class="ch-num">Ch.7</div>
-      <div class="ch-info"><h4>Annuity Contracts</h4><p>30 questions · <span class="lock">🔒 Unlock</span></p></div>
-    </div>
-    <div class="ch-card locked">
-      <div class="ch-num">Ch.8</div>
-      <div class="ch-info"><h4>Group Retirement Plans</h4><p>30 questions · <span class="lock">🔒 Unlock</span></p></div>
-    </div>
+    <button class="btn-primary" onclick="location.href='mock.html'">Start mock exam →</button>
   </div>
 </div>
 
-<!-- PRICING -->
-<div class="section" style="padding-top: 0;">
+<div class="section" style="padding-top:0;">
+  <div class="section-label">Why PassLLQP</div>
+  <div class="section-title">Built differently.</div>
+  <div class="features-grid">
+    <div class="feature"><div class="feature-icon">📖</div><h3>Tutorial first, quiz second</h3><p>Each chapter starts with a plain-language lesson covering all key concepts — then you test yourself. Learn before you practice.</p></div>
+    <div class="feature"><div class="feature-icon">↩️</div><h3>Go back and change answers</h3><p>Navigate freely between questions. Review what you got wrong, go back, reconsider. Just like a real study session.</p></div>
+    <div class="feature"><div class="feature-icon">📈</div><h3>Difficulty progression</h3><p>Questions build from beginner to advanced — just like the real exam. Master the basics before tackling complex scenarios.</p></div>
+    <div class="feature"><div class="feature-icon">📊</div><h3>Know your weak spots</h3><p>After every mock exam, see exactly which chapters you need to focus on — colour coded so you study smart, not long.</p></div>
+    <div class="feature"><div class="feature-icon">🔄</div><h3>Shuffles every attempt</h3><p>Questions shuffle on every attempt so you never memorize order. You learn the material, not the pattern.</p></div>
+    <div class="feature"><div class="feature-icon">📱</div><h3>Study anywhere</h3><p>Works on your phone, tablet, or computer — no app download required. Study on your lunch break or commute.</p></div>
+  </div>
+</div>
+
+<div class="section" style="padding-top:0;">
   <div class="section-label">Pricing</div>
   <div class="section-title">One price. Full access.</div>
   <div class="pricing-wrap">
@@ -224,7 +173,7 @@
       <div class="price-desc">Try before you buy</div>
       <ul class="price-features">
         <li>Chapter 1 — full access</li>
-        <li>30 practice questions</li>
+        <li>Tutorial + 30 practice questions</li>
         <li>All difficulty levels</li>
         <li>Plain-language explanations</li>
       </ul>
@@ -237,6 +186,7 @@
       <div class="price-desc">Everything you need to pass</div>
       <ul class="price-features">
         <li>All 8 chapters unlocked</li>
+        <li>Tutorial for every chapter</li>
         <li>240 practice questions</li>
         <li>Full mock exam (50 questions)</li>
         <li>Chapter performance breakdown</li>
@@ -248,19 +198,56 @@
   </div>
 </div>
 
-<!-- CTA STRIP -->
 <div class="cta-strip">
   <h2>Ready to pass your LLQP?</h2>
   <p>Chapter 1 is completely free. No credit card required.</p>
   <button class="hero-cta" onclick="location.href='chapter1.html'">Start studying now →</button>
 </div>
 
-<!-- FOOTER -->
 <footer>
   <div class="logo">Pass<span>LLQP</span></div>
   <p>Alberta LLQP exam preparation · Built for Canadian financial services professionals</p>
-  <p style="margin-top: 8px;">© 2025 PassLLQP · All rights reserved</p>
+  <p style="margin-top:6px;">© 2025 PassLLQP · All rights reserved</p>
 </footer>
 
+<script>
+const isAdmin = localStorage.getItem('passllqp_admin') === 'true';
+if(isAdmin) document.getElementById('adminBanner').classList.add('visible');
+
+const segChapters = [
+  { num:'Ch.1', title:'Investment & Savings', sub:'Tutorial + 30 questions', free:true, url:'chapter1.html' },
+  { num:'Ch.2', title:'Segregated Funds', sub:'Tutorial + 30 questions', free:false, url:'chapter2.html' },
+  { num:'Ch.3', title:'Annuities', sub:'Tutorial + 30 questions', free:false, url:'chapter3.html' },
+  { num:'Ch.4', title:'Investor Profile', sub:'Tutorial + 30 questions', free:false, url:'chapter4.html' },
+  { num:'Ch.5', title:'Recommendations', sub:'Tutorial + 30 questions', free:false, url:'chapter5.html' },
+  { num:'Ch.6', title:'Seg Fund Contracts', sub:'Tutorial + 30 questions', free:false, url:'chapter6.html' },
+  { num:'Ch.7', title:'Annuity Contracts', sub:'Tutorial + 30 questions', free:false, url:'chapter7.html' },
+  { num:'Ch.8', title:'Group Retirement Plans', sub:'Tutorial + 30 questions', free:false, url:'chapter8.html' },
+];
+
+function renderChapters(chapters){
+  const grid = document.getElementById('chaptersGrid');
+  grid.innerHTML = '';
+  chapters.forEach(ch => {
+    const unlocked = ch.free || isAdmin;
+    const div = document.createElement('div');
+    div.className = 'ch-card' + (unlocked ? ' clickable' : ' locked') + (ch.free ? ' featured' : '');
+    if(unlocked) div.onclick = () => location.href = ch.url;
+    div.innerHTML = `
+      <div class="ch-num ${ch.free ? '' : ''}">${ch.num}</div>
+      <div class="ch-info">
+        <h4>${ch.title}</h4>
+        <p>${ch.sub} · ${unlocked ? (ch.free ? '<span style="color:var(--green);font-weight:600;">Free</span>' : '<span style="color:var(--green);font-weight:600;">Unlocked</span>') : '<span class="lock">🔒 Unlock</span>'}</p>
+      </div>`;
+    grid.appendChild(div);
+  });
+}
+
+function showModule(mod){
+  renderChapters(segChapters);
+}
+
+renderChapters(segChapters);
+</script>
 </body>
 </html>

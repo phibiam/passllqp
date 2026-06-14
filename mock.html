@@ -92,7 +92,7 @@
 <nav>
   <div class="nav-logo">Pass<span>LLQP</span></div>
   <div id="timerDisplay" style="display:none;" class="timer-box">⏱ <span id="timerVal">90:00</span></div>
-  <div class="nav-back" onclick="location.href='index.html'">← Home</div>
+  <div class="nav-back" onclick="location.href='index.html'" style="font-size:13px;color:var(--muted);cursor:pointer;">← Home</div>
 </nav>
 <div class="wrap">
 
@@ -320,6 +320,9 @@ function showResults(){
     bd.innerHTML+=`<div class="ch-row"><div class="ch-lbl">${cs.label}</div><div class="ch-bar-wrap"><div class="ch-bar ${bc}" style="width:${cpct}%"></div></div><div class="ch-pct">${cpct}%</div></div>`;
   });
 }
+
+// Admin check
+const isAdmin = localStorage.getItem("passllqp_admin") === "true";
 
 function retryExam(){
   clearInterval(timerInt);secondsLeft=90*60;

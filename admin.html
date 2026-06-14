@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Access | PassLLQP</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sora:wght@700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --blue:#185FA5; --blue-light:#E6F1FB; --green:#0F6E56; --text:#0F1117; --muted:#6B7280; --border:#E5E7EB; --bg:#F9FAFB; --white:#fff; --radius:12px; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+    .card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 40px; max-width: 420px; width: 100%; margin: 20px; text-align: center; }
+    .logo { font-family: 'Sora', sans-serif; font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+    .logo span { color: var(--blue); }
+    .subtitle { font-size: 13px; color: var(--muted); margin-bottom: 32px; }
+    input { width: 100%; padding: 12px 14px; border: 1.5px solid var(--border); border-radius: 9px; font-size: 14px; font-family: 'Inter', sans-serif; margin-bottom: 12px; outline: none; }
+    input:focus { border-color: var(--blue); }
+    .btn { width: 100%; background: var(--blue); color: #fff; border: none; padding: 12px; border-radius: 9px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; }
+    .error { color: #993C1D; font-size: 13px; margin-top: 8px; display: none; }
+    .success-wrap { display: none; }
+    .success-wrap h2 { font-size: 18px; font-weight: 600; margin-bottom: 8px; color: var(--green); }
+    .success-wrap p { font-size: 13px; color: var(--muted); margin-bottom: 20px; line-height: 1.6; }
+    .nav-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .nav-card { background: var(--blue-light); border: 1px solid var(--border); border-radius: 9px; padding: 14px; cursor: pointer; font-size: 13px; font-weight: 600; color: var(--blue); }
+    .nav-card:hover { background: var(--blue); color: #fff; }
+    .nav-card .ch-label { font-size: 11px; font-weight: 400; color: inherit; opacity: 0.8; margin-top: 3px; }
+  </style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">Pass<span>LLQP</span></div>
+  <div class="subtitle">Admin access — owner only</div>
+
+  <div id="loginWrap">
+    <input type="password" id="passInput" placeholder="Enter admin password" onkeydown="if(event.key==='Enter')checkPass()"/>
+    <button class="btn" onclick="checkPass()">Unlock everything →</button>
+    <div class="error" id="errMsg">Incorrect password. Try again.</div>
+  </div>
+
+  <div class="success-wrap" id="successWrap">
+    <h2>✓ Full access unlocked</h2>
+    <p>All chapters, mock exam, and content are now accessible. This device is remembered.</p>
+    <div class="nav-grid">
+      <div class="nav-card" onclick="location.href='index.html'">🏠 Dashboard<div class="ch-label">Home page</div></div>
+      <div class="nav-card" onclick="location.href='mock.html'">📋 Mock exam<div class="ch-label">50 questions</div></div>
+      <div class="nav-card" onclick="location.href='chapter1.html'">Ch. 1<div class="ch-label">Investment & Savings</div></div>
+      <div class="nav-card" onclick="location.href='chapter2.html'">Ch. 2<div class="ch-label">Segregated Funds</div></div>
+      <div class="nav-card" onclick="location.href='chapter3.html'">Ch. 3<div class="ch-label">Annuities</div></div>
+      <div class="nav-card" onclick="location.href='chapter4.html'">Ch. 4<div class="ch-label">Investor Profile</div></div>
+      <div class="nav-card" onclick="location.href='chapter5.html'">Ch. 5<div class="ch-label">Recommendations</div></div>
+      <div class="nav-card" onclick="location.href='chapter6.html'">Ch. 6<div class="ch-label">SF Contracts</div></div>
+      <div class="nav-card" onclick="location.href='chapter7.html'">Ch. 7<div class="ch-label">Annuity Contracts</div></div>
+      <div class="nav-card" onclick="location.href='chapter8.html'">Ch. 8<div class="ch-label">Group Plans</div></div>
+    </div>
+  </div>
+</div>
+<script>
+// Check if already unlocked
+if(localStorage.getItem('passllqp_admin')==='true'){
+  document.getElementById('loginWrap').style.display='none';
+  document.getElementById('successWrap').style.display='block';
+}
+function checkPass(){
+  const val = document.getElementById('passInput').value;
+  // Change this password to whatever you want
+  if(val === 'philip2025' || val === 'passllqp'){
+    localStorage.setItem('passllqp_admin','true');
+    document.getElementById('loginWrap').style.display='none';
+    document.getElementById('successWrap').style.display='block';
+  } else {
+    document.getElementById('errMsg').style.display='block';
+    document.getElementById('passInput').value='';
+  }
+}
+</script>
+</body>
+</html>
