@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mock Exam — Segregated Funds & Annuities | PassLLQP</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sora:wght@700&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--blue:#185FA5;--blue-light:#E6F1FB;--green:#0F6E56;--red:#993C1D;--text:#0F1117;--muted:#6B7280;--border:#E5E7EB;--bg:#F9FAFB;--white:#fff;--radius:12px}
+    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+    nav{background:var(--white);border-bottom:1px solid var(--border);padding:0 20px;height:56px;display:flex;align-items:center;justify-content:space-between}
+    .nav-logo{font-family:'Sora',sans-serif;font-size:17px;font-weight:700;cursor:pointer}
+    .nav-logo span{color:var(--blue)}
+    .nav-back{font-size:13px;color:var(--muted);cursor:pointer}
+    .timer-box{display:flex;align-items:center;gap:8px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:5px 12px;font-size:14px;font-weight:600;color:var(--text)}
+    .timer-box.warning{border-color:var(--red);color:var(--red)}
+    .wrap{max-width:680px;margin:0 auto;padding:20px 16px 40px}
+    .start-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:36px;text-align:center}
+    .start-card h1{font-family:'Sora',sans-serif;font-size:22px;margin-bottom:6px}
+    .module-badge{display:inline-block;background:var(--blue-light);color:var(--blue);font-size:12px;font-weight:600;padding:4px 12px;border-radius:20px;margin-bottom:14px}
+    .start-card p{color:var(--muted);font-size:14px;margin-bottom:24px;line-height:1.6}
+    .info-row{display:flex;justify-content:center;gap:16px;margin-bottom:24px;flex-wrap:wrap}
+    .info-box{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px 20px;text-align:center;min-width:90px}
+    .iv{font-size:22px;font-weight:700;color:var(--blue)}
+    .il{font-size:11px;color:var(--muted);margin-top:2px;font-weight:500}
+    .start-notes{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:24px;font-size:13px;color:var(--muted);text-align:left;line-height:1.7}
+    .start-notes strong{color:var(--text)}
+    .start-btn{background:var(--blue);color:#fff;border:none;padding:13px 36px;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
+    .start-btn:disabled{opacity:0.5;cursor:default}
+    .loading-msg{color:var(--muted);font-size:13px;margin-top:12px}
+    #examWrap{display:none}
+    .q-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+    .q-num-label{font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.5px}
+    .ch-tag{font-size:11px;font-weight:600;color:var(--blue);background:var(--blue-light);padding:3px 9px;border-radius:20px}
+    .diff-pill{font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px}
+    .diff-pill.beginner{background:#ECFDF5;color:#065F46}
+    .diff-pill.intermediate{background:#FFF7ED;color:#92400E}
+    .diff-pill.advanced{background:#FEF2F2;color:#991B1B}
+    .progress-bar{height:4px;background:var(--border);border-radius:2px;margin-bottom:20px;overflow:hidden}
+    .progress-fill{height:100%;background:var(--blue);border-radius:2px;transition:width .3s}
+    .q-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:16px}
+    .q-text{font-size:15px;font-weight:500;color:var(--text);line-height:1.6;margin-bottom:18px}
+    .option{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;border:1.5px solid var(--border);border-radius:9px;cursor:pointer;margin-bottom:8px;transition:border-color .15s,background .15s}
+    .option:hover{border-color:var(--blue);background:var(--blue-light)}
+    .option.correct{border-color:var(--green)!important;background:#ECFDF5!important}
+    .option.wrong{border-color:var(--red)!important;background:#FEF2F2!important}
+    .option.disabled{cursor:default}
+    .option.disabled:hover{border-color:var(--border);background:var(--white)}
+    .option.correct.disabled:hover,.option.wrong.disabled:hover{border-color:inherit;background:inherit}
+    .opt-l{font-size:11px;font-weight:600;color:var(--blue);background:var(--blue-light);width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+    .opt-txt{font-size:14px;line-height:1.5;color:var(--text)}
+    .exp-box{background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:14px 16px;margin-top:12px;display:none}
+    .exp-box.visible{display:block}
+    .exp-label{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.8px;margin-bottom:6px}
+    .exp-text{font-size:13px;color:var(--text);line-height:1.6}
+    .q-footer{display:flex;align-items:center;justify-content:space-between;padding:12px 0}
+    .fl-status{font-size:13px;font-weight:600;color:var(--muted)}
+    .live-score{font-size:13px;color:var(--muted)}
+    .live-score span{color:var(--text);font-weight:600}
+    .next-btn,.finish-btn{background:var(--blue);color:#fff;border:none;padding:10px 24px;border-radius:9px;font-size:14px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
+    .finish-btn{background:var(--green)}
+    button:disabled{opacity:.35;cursor:default}
+    .results-wrap{display:none;background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:32px;text-align:center}
+    .results-wrap.visible{display:block}
+    .result-pct{font-family:'Sora',sans-serif;font-size:52px;font-weight:700;margin-bottom:8px}
+    .result-pct.pass{color:var(--green)}
+    .result-pct.fail{color:var(--red)}
+    .res-verdict{font-size:18px;font-weight:600;margin-bottom:4px}
+    .res-sub{font-size:13px;color:var(--muted);margin-bottom:24px}
+    .res-grid{display:flex;justify-content:center;gap:16px;margin-bottom:28px;flex-wrap:wrap}
+    .res-stat{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px 20px;min-width:90px}
+    .rv{font-size:22px;font-weight:700;color:var(--blue)}
+    .rl{font-size:11px;color:var(--muted);margin-top:2px}
+    .breakdown-title{font-size:12px;font-weight:600;text-align:left;margin-bottom:12px;color:var(--muted);letter-spacing:.4px;text-transform:uppercase}
+    .ch-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+    .ch-lbl{font-size:12px;color:var(--text);width:190px;text-align:left;flex-shrink:0}
+    .ch-bar-wrap{flex:1;background:var(--border);border-radius:4px;height:8px;overflow:hidden}
+    .ch-bar{height:100%;border-radius:4px}
+    .ch-bar.good{background:var(--green)}
+    .ch-bar.mid{background:#D97706}
+    .ch-bar.low{background:var(--red)}
+    .ch-pct{font-size:12px;font-weight:600;color:var(--text);width:36px;text-align:right}
+    .res-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:24px}
+    .retry-btn{background:var(--bg);border:1.5px solid var(--border);color:var(--text);padding:10px 22px;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
+    .home-btn{background:var(--blue);color:#fff;border:none;padding:10px 22px;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
+  </style>
+</head>
+<body>
+<nav>
+  <div class="nav-logo" onclick="location.href='index.html'">Pass<span>LLQP</span></div>
+  <div id="timerDisplay" style="display:none" class="timer-box">⏱ <span id="timerVal">90:00</span></div>
+  <div class="nav-back" onclick="location.href='index.html'">← Home</div>
+</nav>
+<div class="wrap">
+
+  <div class="start-card" id="startCard">
+    <div class="module-badge">Segregated Funds &amp; Annuities</div>
+    <h1>Mock Exam</h1>
+    <p>40 questions across all 8 Seg Funds &amp; Annuities chapters, drawn randomly each attempt.</p>
+    <div class="info-row">
+      <div class="info-box"><div class="iv">40</div><div class="il">Questions</div></div>
+      <div class="info-box"><div class="iv">60</div><div class="il">Minutes</div></div>
+      <div class="info-box"><div class="iv">60%</div><div class="il">Pass mark</div></div>
+    </div>
+    <div class="start-notes">
+      <strong>How it works:</strong><br>
+      · 5 questions per chapter × 8 chapters = 40 questions<br>
+      · Questions drawn randomly from each chapter's 100-question pool<br>
+      · Mix of Beginner, Intermediate and Advanced<br>
+      · Correct answer + explanation shown after each question<br>
+      · Chapter-by-chapter score breakdown on results screen
+    </div>
+    <button class="start-btn" id="startBtn" onclick="startExam()" disabled>Loading questions…</button>
+    <div class="loading-msg" id="loadMsg">Fetching question pools from all 8 chapters…</div>
+  </div>
+
+  <div id="examWrap">
+    <div class="q-header">
+      <span class="q-num-label" id="qNum">QUESTION 1 OF 40</span>
+      <span class="ch-tag" id="chTag"></span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progFill" style="width:0%"></div></div>
+    <div class="q-card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+        <span class="diff-pill beginner" id="diffPill">Beginner</span>
+      </div>
+      <div class="q-text" id="qText"></div>
+      <div id="opts"></div>
+      <div class="exp-box" id="exp">
+        <div class="exp-label">WHY THIS IS CORRECT</div>
+        <div class="exp-text" id="expText"></div>
+      </div>
+    </div>
+    <div class="q-footer">
+      <div>
+        <div class="fl-status" id="fl">Select an answer to continue</div>
+        <div class="live-score">✓ <span id="cCount">0</span> correct &nbsp;✗ <span id="wCount">0</span> wrong</div>
+      </div>
+      <button class="next-btn" id="nextBtn" disabled onclick="next()">Next →</button>
+    </div>
+  </div>
+
+  <div class="results-wrap" id="resultsWrap">
+    <div class="result-pct" id="resPct">0%</div>
+    <div class="res-verdict" id="resVerdict"></div>
+    <div class="res-sub" id="resSub"></div>
+    <div class="res-grid">
+      <div class="res-stat"><div class="rv" id="rC">0</div><div class="rl">correct</div></div>
+      <div class="res-stat"><div class="rv" id="rW">0</div><div class="rl">incorrect</div></div>
+      <div class="res-stat"><div class="rv" id="rP">0%</div><div class="rl">score</div></div>
+      <div class="res-stat"><div class="rv" id="rT">—</div><div class="rl">time taken</div></div>
+    </div>
+    <div style="text-align:left">
+      <div class="breakdown-title">Score by chapter</div>
+      <div id="chBreakdown"></div>
+    </div>
+    <div class="res-actions">
+      <button class="retry-btn" onclick="retryExam()">Retry exam</button>
+      <button class="home-btn" onclick="location.href='index.html'">Back to home</button>
+    </div>
+  </div>
+
+</div>
+<script>
+const CHAPTERS=[
+  {file:'chapter1.html',var:'questions',ch:'S1',label:'Ch.1 — Investments & Savings'},
+  {file:'chapter2.html',var:'questions',ch:'S2',label:'Ch.2 — Segregated Funds'},
+  {file:'chapter3.html',var:'qs',       ch:'S3',label:'Ch.3 — Annuities'},
+  {file:'chapter4.html',var:'qs',       ch:'S4',label:'Ch.4 — Pensions'},
+  {file:'chapter5.html',var:'qs',       ch:'S5',label:'Ch.5 — Sales Process'},
+  {file:'chapter6.html',var:'qs',       ch:'S6',label:'Ch.6 — Suitability'},
+  {file:'chapter7.html',var:'qs',       ch:'S7',label:'Ch.7 — Client Relations'},
+  {file:'chapter8.html',var:'qs',       ch:'S8',label:'Ch.8 — Group Plans'},
+];
+const TOTAL=40,PER_CH=5,MINS=60;
+let allPools={},examQ=[],current=0,score=0,answered=0,timerInt=null,secondsLeft=MINS*60,startTime=null,chScores={};
+
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+function extractQs(html,varName){
+  const marker='const '+varName+'=[';
+  let s=html.indexOf(marker);
+  if(s<0)return[];
+  const as=html.indexOf('[',s),ae=html.indexOf('];',as);
+  if(as<0||ae<0)return[];
+  try{return Function('"use strict";return '+html.slice(as,ae+1))();}catch(e){return[];}
+}
+
+async function loadAll(){
+  const results=await Promise.all(CHAPTERS.map(async ch=>{
+    try{const r=await fetch(ch.file+'?v='+Date.now());const h=await r.text();return{ch,qs:extractQs(h,ch.var)};}
+    catch(e){return{ch,qs:[]};}
+  }));
+  results.forEach(({ch,qs})=>allPools[ch.ch]=qs.map(q=>({...q,_ch:ch.ch,_label:ch.label})));
+  const loaded=Object.values(allPools).filter(a=>a.length>0).length;
+  document.getElementById('loadMsg').textContent='Loaded '+Object.values(allPools).reduce((s,a)=>s+a.length,0)+' questions from '+loaded+'/'+CHAPTERS.length+' chapters';
+  document.getElementById('startBtn').disabled=false;
+  document.getElementById('startBtn').textContent='Start mock exam →';
+}
+
+function selectQ(){
+  const sel=[];
+  CHAPTERS.forEach(ch=>{sel.push(...shuffle(allPools[ch.ch]||[]).slice(0,PER_CH));});
+  return shuffle(sel);
+}
+
+function startExam(){
+  examQ=selectQ();current=0;score=0;answered=0;chScores={};
+  examQ.forEach(q=>{if(!chScores[q._ch])chScores[q._ch]={label:q._label,correct:0,total:0};chScores[q._ch].total++;});
+  document.getElementById('startCard').style.display='none';
+  document.getElementById('examWrap').style.display='block';
+  document.getElementById('timerDisplay').style.display='flex';
+  secondsLeft=MINS*60;startTime=Date.now();
+  timerInt=setInterval(()=>{
+    secondsLeft--;
+    const m=Math.floor(secondsLeft/60),s=secondsLeft%60;
+    document.getElementById('timerVal').textContent=m+':'+(s<10?'0':'')+s;
+    if(secondsLeft<=300)document.getElementById('timerDisplay').classList.add('warning');
+    if(secondsLeft<=0){clearInterval(timerInt);showResults();}
+  },1000);
+  render();
+}
+
+function render(){
+  const q=examQ[current],tot=examQ.length;
+  document.getElementById('qNum').textContent='QUESTION '+(current+1)+' OF '+tot;
+  document.getElementById('progFill').style.width=((current/tot)*100)+'%';
+  document.getElementById('chTag').textContent=q._label;
+  const pill=document.getElementById('diffPill');
+  pill.textContent=q.d.charAt(0).toUpperCase()+q.d.slice(1);
+  pill.className='diff-pill '+q.d;
+  document.getElementById('qText').textContent=q.q;
+  document.getElementById('exp').classList.remove('visible');
+  document.getElementById('expText').textContent=q.exp;
+  const c=document.getElementById('opts');c.innerHTML='';
+  q.opts.forEach((opt,i)=>{
+    const div=document.createElement('div');div.className='option';
+    div.innerHTML='<span class="opt-l">'+String.fromCharCode(65+i)+'</span><span class="opt-txt">'+opt+'</span>';
+    div.onclick=()=>sel(div,i===q.a,i,q.a);c.appendChild(div);
+  });
+  const nb=document.getElementById('nextBtn');
+  nb.disabled=true;nb.className=current===tot-1?'finish-btn':'next-btn';
+  nb.textContent=current===tot-1?'Finish exam →':'Next →';
+  document.getElementById('fl').textContent='Select an answer to continue';
+}
+
+function sel(el,ok,chosen,correct){
+  document.querySelectorAll('.option').forEach((o,i)=>{o.onclick=null;o.classList.add('disabled');if(i===correct)o.classList.add('correct');});
+  if(!ok)el.classList.add('wrong');
+  document.getElementById('exp').classList.add('visible');
+  document.getElementById('nextBtn').disabled=false;
+  answered++;
+  if(ok){score++;chScores[examQ[current]._ch].correct++;}
+  document.getElementById('cCount').textContent=score;
+  document.getElementById('wCount').textContent=answered-score;
+  document.getElementById('fl').textContent=ok?'✓ Correct':'✗ Incorrect';
+}
+
+function next(){current++;if(current>=examQ.length){showResults();return;}render();}
+
+function showResults(){
+  clearInterval(timerInt);
+  document.getElementById('examWrap').style.display='none';
+  document.getElementById('timerDisplay').style.display='none';
+  document.getElementById('resultsWrap').classList.add('visible');
+  const pct=Math.round((score/examQ.length)*100),pass=pct>=60;
+  document.getElementById('resPct').textContent=pct+'%';
+  document.getElementById('resPct').className='result-pct '+(pass?'pass':'fail');
+  document.getElementById('resVerdict').textContent=pass?'✓ You passed!':'✗ Not yet — keep practising';
+  document.getElementById('resSub').textContent=pass
+    ?'You scored '+score+' out of '+examQ.length+'. You\'re ready for the real exam.'
+    :'You scored '+score+' out of '+examQ.length+'. Pass mark is 60%. Review the chapters below.';
+  document.getElementById('rC').textContent=score;
+  document.getElementById('rW').textContent=examQ.length-score;
+  document.getElementById('rP').textContent=pct+'%';
+  const el=Math.floor((Date.now()-startTime)/1000);
+  document.getElementById('rT').textContent=Math.floor(el/60)+'m '+el%60+'s';
+  const bd=document.getElementById('chBreakdown');bd.innerHTML='';
+  CHAPTERS.forEach(ch=>{
+    const cs=chScores[ch.ch];if(!cs)return;
+    const cpct=cs.total>0?Math.round((cs.correct/cs.total)*100):0;
+    const bc=cpct>=70?'good':cpct>=50?'mid':'low';
+    bd.innerHTML+='<div class="ch-row"><div class="ch-lbl">'+cs.label+'</div><div class="ch-bar-wrap"><div class="ch-bar '+bc+'" style="width:'+cpct+'%"></div></div><div class="ch-pct">'+cpct+'%</div></div>';
+  });
+}
+
+function retryExam(){
+  clearInterval(timerInt);secondsLeft=MINS*60;
+  document.getElementById('timerVal').textContent=MINS+':00';
+  document.getElementById('timerDisplay').classList.remove('warning');
+  document.getElementById('resultsWrap').classList.remove('visible');
+  document.getElementById('startCard').style.display='block';
+}
+
+loadAll();
+</script>
+</body>
+</html>
