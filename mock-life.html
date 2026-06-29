@@ -8,7 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sora:wght@700&display=swap" rel="stylesheet">
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--blue:#185FA5;--blue-light:#E6F1FB;--green:#0F6E56;--red:#993C1D;--text:#0F1117;--muted:#6B7280;--border:#E5E7EB;--bg:#F9FAFB;--white:#fff;--radius:12px}
+    :root{--blue:#7A1F3D;--blue-light:#FBEDF1;--green:#0F6E56;--red:#993C1D;--text:#0F1117;--muted:#6B7280;--border:#E5E7EB;--bg:#F9FAFB;--white:#fff;--radius:12px}
     body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
     nav{background:var(--white);border-bottom:1px solid var(--border);padding:0 20px;height:56px;display:flex;align-items:center;justify-content:space-between}
     .nav-logo{font-family:'Sora',sans-serif;font-size:17px;font-weight:700;cursor:pointer}
@@ -33,7 +33,6 @@
     #examWrap{display:none}
     .q-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
     .q-num-label{font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.5px}
-    .ch-tag{font-size:11px;font-weight:600;color:var(--blue);background:var(--blue-light);padding:3px 9px;border-radius:20px}
     .diff-pill{font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px}
     .diff-pill.beginner{background:#ECFDF5;color:#065F46}
     .diff-pill.intermediate{background:#FFF7ED;color:#92400E}
@@ -119,7 +118,6 @@
   <div id="examWrap">
     <div class="q-header">
       <span class="q-num-label" id="qNum">QUESTION 1 OF 60</span>
-      <span class="ch-tag" id="chTag"></span>
     </div>
     <div class="progress-bar"><div class="progress-fill" id="progFill" style="width:0%"></div></div>
     <div class="q-card">
@@ -232,8 +230,7 @@ function render(){
   const q=examQ[current],tot=examQ.length;
   document.getElementById('qNum').textContent='QUESTION '+(current+1)+' OF '+tot;
   document.getElementById('progFill').style.width=((current/tot)*100)+'%';
-  document.getElementById('chTag').textContent='';
-  const pill=document.getElementById('diffPill');
+    const pill=document.getElementById('diffPill');
   pill.textContent=q.d.charAt(0).toUpperCase()+q.d.slice(1);
   pill.className='diff-pill '+q.d;
   document.getElementById('qText').textContent=q.q;
@@ -258,7 +255,6 @@ function sel(el,ok,chosen,correct){
   document.getElementById('exp').classList.add('visible');
   document.getElementById('nextBtn').disabled=false;
   const _lbl=examQ[current]._label;
-  document.getElementById('chTag').textContent=_lbl;
   document.getElementById('expChapterLabel').textContent=_lbl;
   document.getElementById('expChapter').style.display='block';
   answered++;
