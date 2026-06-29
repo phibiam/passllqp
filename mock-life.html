@@ -131,6 +131,7 @@
       <div class="exp-box" id="exp">
         <div class="exp-label">WHY THIS IS CORRECT</div>
         <div class="exp-text" id="expText"></div>
+        <div id="expChapter" style="margin-top:10px;font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.4px;display:none">📌 <span id="expChapterLabel"></span></div>
       </div>
     </div>
     <div class="q-footer">
@@ -179,7 +180,7 @@ const CHAPTERS=[
   {file:'life-chapter12.html',var:'qs',ch:'L12',label:'Ch.12 — Ongoing Service'},
 ];
 const TOTAL=35,PER_CH=5,MINS=75;
-let allPools={},examQ=[],current=0,score=0,answered=0,timerInt=null,secondsLeft=MINS*60,startTime=null,chScores={};
+let allPools={},examQ=[],current=0,score=0,answered=0,timerInt=null,secondsLeft=MINS*60,startTime=null,chScores={},timedOut=false;
 
 function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 
@@ -211,7 +212,7 @@ function selectQ(){
 }
 
 function startExam(){
-  examQ=selectQ();current=0;score=0;answered=0;chScores={};
+  examQ=selectQ();current=0;score=0;answered=0;chScores={};timedOut=false;
   examQ.forEach(q=>{if(!chScores[q._ch])chScores[q._ch]={label:q._label,correct:0,total:0};chScores[q._ch].total++;});
   document.getElementById('startCard').style.display='none';
   document.getElementById('examWrap').style.display='block';
@@ -222,7 +223,7 @@ function startExam(){
     const m=Math.floor(secondsLeft/60),s=secondsLeft%60;
     document.getElementById('timerVal').textContent=m+':'+(s<10?'0':'')+s;
     if(secondsLeft<=300)document.getElementById('timerDisplay').classList.add('warning');
-    if(secondsLeft<=0){clearInterval(timerInt);showResults();}
+    if(secondsLeft<=0){clearInterval(timerInt);timedOut=true;showResults();}
   },1000);
   render();
 }
@@ -231,12 +232,13 @@ function render(){
   const q=examQ[current],tot=examQ.length;
   document.getElementById('qNum').textContent='QUESTION '+(current+1)+' OF '+tot;
   document.getElementById('progFill').style.width=((current/tot)*100)+'%';
-  document.getElementById('chTag').textContent=q._label;
+  document.getElementById('chTag').textContent='';
   const pill=document.getElementById('diffPill');
   pill.textContent=q.d.charAt(0).toUpperCase()+q.d.slice(1);
   pill.className='diff-pill '+q.d;
   document.getElementById('qText').textContent=q.q;
   document.getElementById('exp').classList.remove('visible');
+  document.getElementById('expChapter').style.display='none';
   document.getElementById('expText').textContent=q.exp;
   const c=document.getElementById('opts');c.innerHTML='';
   q.opts.forEach((opt,i)=>{
@@ -255,6 +257,10 @@ function sel(el,ok,chosen,correct){
   if(!ok)el.classList.add('wrong');
   document.getElementById('exp').classList.add('visible');
   document.getElementById('nextBtn').disabled=false;
+  const _lbl=examQ[current]._label;
+  document.getElementById('chTag').textContent=_lbl;
+  document.getElementById('expChapterLabel').textContent=_lbl;
+  document.getElementById('expChapter').style.display='block';
   answered++;
   if(ok){score++;chScores[examQ[current]._ch].correct++;}
   document.getElementById('cCount').textContent=score;
@@ -271,11 +277,16 @@ function showResults(){
   document.getElementById('resultsWrap').classList.add('visible');
   const pct=Math.round((score/examQ.length)*100),pass=pct>=60;
   document.getElementById('resPct').textContent=pct+'%';
-  document.getElementById('resPct').className='result-pct '+(pass?'pass':'fail');
-  document.getElementById('resVerdict').textContent=pass?'✓ You passed!':'✗ Not yet — keep practising';
-  document.getElementById('resSub').textContent=pass
-    ?'You scored '+score+' out of '+examQ.length+'. You\'re ready for the real exam.'
-    :'You scored '+score+' out of '+examQ.length+'. Pass mark is 60%. Review the chapters below.';
+  document.getElementById('resPct').className='result-pct '+(pass&&!timedOut?'pass':'fail');
+  if(timedOut){
+    document.getElementById('resVerdict').textContent='⏱ Time\'s up!';
+    document.getElementById('resSub').textContent='You answered '+answered+' of '+examQ.length+' questions. Score on answered: '+score+'/'+answered+' ('+pct+'%). Pass mark is 60%.';
+  } else {
+    document.getElementById('resVerdict').textContent=pass?'✓ You passed!':'✗ Not yet — keep practising';
+    document.getElementById('resSub').textContent=pass
+      ?'You scored '+score+' out of '+examQ.length+'. You\'re ready for the real exam.'
+      :'You scored '+score+' out of '+examQ.length+'. Pass mark is 60%. Review the chapters below.';
+  }
   document.getElementById('rC').textContent=score;
   document.getElementById('rW').textContent=examQ.length-score;
   document.getElementById('rP').textContent=pct+'%';
@@ -291,7 +302,7 @@ function showResults(){
 }
 
 function retryExam(){
-  clearInterval(timerInt);secondsLeft=MINS*60;
+  clearInterval(timerInt);secondsLeft=MINS*60;timedOut=false;
   document.getElementById('timerVal').textContent=MINS+':00';
   document.getElementById('timerDisplay').classList.remove('warning');
   document.getElementById('resultsWrap').classList.remove('visible');
